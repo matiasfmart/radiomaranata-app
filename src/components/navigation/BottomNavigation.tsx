@@ -27,16 +27,16 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
 
 function NavItem({ tab, active, isPlaying, onPress }: NavItemProps) {
   const scale = useRef(new Animated.Value(1)).current;
-  return <Animated.View style={[styles.navItem, { transform: [{ scale }] }]}><Pressable accessibilityRole="tab" accessibilityState={{ selected: active }} aria-selected={active} accessibilityLabel={tab.label} onPress={onPress} onPressIn={() => Animated.spring(scale, { toValue: 0.985, useNativeDriver: true }).start()} onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()} style={[styles.navTap, active && styles.navTapActive]}><View style={styles.navIconWrap}><Ionicons name={tab.icon} size={tab.id === 'listen' ? 22 : 20} color={active ? colors.text : colors.textTertiary} />{isPlaying && <View style={styles.navPlayingDot} />}</View><Text style={[styles.navLabel, active && styles.navLabelActive]}>{tab.label}</Text></Pressable></Animated.View>;
+  return <Animated.View style={[styles.navItem, { transform: [{ scale }] }]}><Pressable accessibilityRole="tab" accessibilityState={{ selected: active }} aria-selected={active} accessibilityLabel={tab.label} onPress={onPress} onPressIn={() => Animated.spring(scale, { toValue: 0.985, useNativeDriver: true }).start()} onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()} style={[styles.navTap, active && styles.navTapActive]}><View style={styles.navIconWrap}><Ionicons name={tab.icon} size={tab.id === 'listen' ? 22 : 20} color={active ? colors.foreground : colors.foregroundSubtle} />{isPlaying && <View style={styles.navPlayingDot} />}</View><Text style={[styles.navLabel, active && styles.navLabelActive]}>{tab.label}</Text></Pressable></Animated.View>;
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', left: 18, right: 18, bottom: 14, minHeight: 60, flexDirection: 'row', alignItems: 'center', borderRadius: 22, backgroundColor: 'rgba(11,12,14,0.86)', borderColor: 'rgba(255,255,255,0.045)', borderWidth: 1, boxShadow: '0px 10px 26px rgba(0,0,0,0.14)', paddingHorizontal: 6, paddingVertical: 6 },
+  navDock: { position: 'absolute', left: 18, right: 18, bottom: 14, minHeight: 60, flexDirection: 'row', alignItems: 'center', borderRadius: 22, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: 6, paddingVertical: 6 },
   navItem: { flex: 1 },
   navTap: { minHeight: 48, alignItems: 'center', justifyContent: 'center', gap: 4, borderRadius: 17 },
-  navTapActive: { backgroundColor: 'rgba(241,199,107,0.12)' },
+  navTapActive: { backgroundColor: colors.muted },
   navIconWrap: { width: 24, height: 22, alignItems: 'center', justifyContent: 'center' },
-  navPlayingDot: { position: 'absolute', top: 0, right: 0, width: 5, height: 5, borderRadius: tokens.radius.pill, backgroundColor: colors.live },
-  navLabel: { color: colors.textTertiary, fontFamily: fonts.bodyMedium, fontSize: 11 },
-  navLabelActive: { color: colors.text, fontFamily: fonts.bodySemi },
+  navPlayingDot: { position: 'absolute', top: 0, right: 0, width: 5, height: 5, borderRadius: tokens.radius.pill, backgroundColor: colors.foreground },
+  navLabel: { color: colors.foregroundSubtle, fontFamily: fonts.bodyMedium, fontSize: 11 },
+  navLabelActive: { color: colors.foreground, fontFamily: fonts.bodySemi },
 });

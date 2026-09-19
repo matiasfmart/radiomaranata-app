@@ -24,7 +24,7 @@ export default function App() {
   const { screenTransition, transitionY } = useScreenTransition(activeTab);
 
   if (!fontsLoaded) {
-    return <View style={styles.loadingScreen}><ActivityIndicator color={colors.accent} /></View>;
+    return <View style={styles.loadingScreen}><ActivityIndicator color={colors.foreground} /></View>;
   }
 
   return (
@@ -43,8 +43,8 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: colors.background },
   safeArea: { flex: 1 },
   screen: { flex: 1 },
-  loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg },
+  loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
 });

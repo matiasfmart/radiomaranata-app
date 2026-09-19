@@ -62,7 +62,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
             <Animated.View style={[styles.playHalo, { opacity: isPlaying ? haloOpacity : 0, transform: [{ scale: haloScale }] }]} />
             <Animated.View style={{ transform: [{ scale: pressScale }] }}>
               <Pressable accessibilityLabel={buttonLabel} accessibilityRole="button" disabled={!streamReady || isLoading} onPress={playbackStatus === 'error' ? onRetry : onToggle} onPressIn={() => Animated.spring(pressScale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()} onPressOut={() => Animated.spring(pressScale, { toValue: 1, useNativeDriver: true }).start()} style={[styles.playButton, (!streamReady || isLoading) && styles.playButtonDisabled]}>
-                {isLoading ? <ActivityIndicator color={colors.bg} /> : <Ionicons name={isPlaying ? 'pause' : 'play'} size={36} color={colors.bg} />}
+                {isLoading ? <ActivityIndicator color={colors.invertedForeground} /> : <Ionicons name={isPlaying ? 'pause' : 'play'} size={36} color={colors.invertedForeground} />}
               </Pressable>
             </Animated.View>
           </View>
@@ -83,28 +83,28 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
 }
 
 const styles = StyleSheet.create({
-  listenScreen: { flex: 1, paddingHorizontal: tokens.space[3], paddingTop: tokens.space[3], paddingBottom: 104, justifyContent: 'space-between', backgroundColor: colors.bg, overflow: 'hidden' },
-  warmAura: { position: 'absolute', top: -90, right: -150, width: 320, height: 320, borderRadius: tokens.radius.pill, backgroundColor: 'rgba(241,199,107,0.055)' },
+  listenScreen: { flex: 1, paddingHorizontal: tokens.space[3], paddingTop: tokens.space[3], paddingBottom: 104, justifyContent: 'space-between', backgroundColor: colors.background, overflow: 'hidden' },
+  warmAura: { position: 'absolute', top: -90, right: -150, width: 320, height: 320, borderRadius: tokens.radius.pill, backgroundColor: colors.muted, opacity: 0.36 },
   listenHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: tokens.space[2] },
   brandLockup: { flex: 1 },
-  wordmark: { color: colors.text, fontFamily: fonts.display, fontSize: 28, lineHeight: 30, fontWeight: '700', letterSpacing: 0 },
-  frequency: { color: colors.textTertiary, fontFamily: fonts.monoSemi, fontSize: 11, marginTop: 4 },
-  signalMark: { width: 34, height: 34, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.026)' },
-  signalDot: { width: 7, height: 7, borderRadius: tokens.radius.pill, backgroundColor: colors.textTertiary },
-  signalDotActive: { backgroundColor: colors.accent },
+  wordmark: { color: colors.foreground, fontFamily: fonts.display, fontSize: 28, lineHeight: 30, fontWeight: '700', letterSpacing: 0 },
+  frequency: { color: colors.foregroundSubtle, fontFamily: fonts.monoSemi, fontSize: 11, marginTop: 4 },
+  signalMark: { width: 34, height: 34, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.muted },
+  signalDot: { width: 7, height: 7, borderRadius: tokens.radius.pill, backgroundColor: colors.foregroundSubtle },
+  signalDotActive: { backgroundColor: colors.foreground },
   listenBody: { flex: 1, justifyContent: 'center', paddingTop: tokens.space[2] },
-  radioConsole: { width: '100%', minHeight: 328, borderRadius: tokens.radius.panel, alignItems: 'center', justifyContent: 'center', padding: tokens.space[3], backgroundColor: colors.bgElevated, overflow: 'hidden', borderColor: colors.line, borderWidth: 1, boxShadow: tokens.shadow.artwork },
-  consoleStatus: { color: colors.textTertiary, fontFamily: fonts.bodyMedium, fontSize: 13, marginTop: 10, textAlign: 'center' },
-  consoleFrequency: { color: colors.text, fontFamily: fonts.display, fontSize: 78, lineHeight: 80, fontWeight: '700', textAlign: 'center' },
-  consoleLabel: { color: colors.textSecondary, fontFamily: fonts.bodySemi, fontSize: 17, marginTop: 4, textAlign: 'center' },
+  radioConsole: { width: '100%', minHeight: 328, borderRadius: tokens.radius.panel, alignItems: 'center', justifyContent: 'center', padding: tokens.space[3], backgroundColor: colors.surface, overflow: 'hidden', borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.artwork },
+  consoleStatus: { color: colors.foregroundSubtle, fontFamily: fonts.bodyMedium, fontSize: 13, marginTop: 10, textAlign: 'center' },
+  consoleFrequency: { color: colors.foreground, fontFamily: fonts.display, fontSize: 78, lineHeight: 80, fontWeight: '700', textAlign: 'center' },
+  consoleLabel: { color: colors.mutedForeground, fontFamily: fonts.bodySemi, fontSize: 17, marginTop: 4, textAlign: 'center' },
   trackInfo: { alignItems: 'center', marginTop: tokens.space[3], minHeight: 82, justifyContent: 'center' },
-  trackTitle: { color: colors.text, fontFamily: fonts.display, fontSize: 26, lineHeight: 31, fontWeight: '700', textAlign: 'center' },
-  trackArtist: { color: colors.textSecondary, fontFamily: fonts.bodyMedium, fontSize: 15, marginTop: 7, textAlign: 'center' },
-  programName: { color: colors.textTertiary, fontFamily: fonts.monoSemi, fontSize: 11, marginRight: 10 },
+  trackTitle: { color: colors.foreground, fontFamily: fonts.display, fontSize: 26, lineHeight: 31, fontWeight: '700', textAlign: 'center' },
+  trackArtist: { color: colors.mutedForeground, fontFamily: fonts.bodyMedium, fontSize: 15, marginTop: 7, textAlign: 'center' },
+  programName: { color: colors.foregroundSubtle, fontFamily: fonts.monoSemi, fontSize: 11, marginRight: 10 },
   playArea: { width: 108, height: 108, marginTop: tokens.space[4], alignItems: 'center', justifyContent: 'center' },
-  playHalo: { position: 'absolute', width: 104, height: 104, borderRadius: tokens.radius.pill, backgroundColor: colors.accentGlow },
-  playButton: { width: 84, height: 84, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accent, boxShadow: '0px 8px 16px rgba(241,199,107,0.14)' },
+  playHalo: { position: 'absolute', width: 104, height: 104, borderRadius: tokens.radius.pill, backgroundColor: colors.foreground, opacity: 0.12 },
+  playButton: { width: 84, height: 84, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.invertedBackground, boxShadow: tokens.shadow.floating },
   playButtonDisabled: { opacity: 0.46 },
-  listenersRow: { minHeight: 36, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', justifyContent: 'center', paddingHorizontal: tokens.space[2], backgroundColor: 'transparent' },
-  listenersText: { flexShrink: 1, color: colors.textSecondary, fontFamily: fonts.bodySemi, fontSize: 13, marginRight: 8 },
+  listenersRow: { minHeight: 36, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', justifyContent: 'center', paddingHorizontal: tokens.space[2], backgroundColor: colors.transparent },
+  listenersText: { flexShrink: 1, color: colors.mutedForeground, fontFamily: fonts.bodySemi, fontSize: 13, marginRight: 8 },
 });

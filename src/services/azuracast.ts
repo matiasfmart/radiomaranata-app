@@ -1,3 +1,6 @@
+import { appConfig } from '../config/app';
+import { playbackConfig } from '../constants/playback';
+
 export type AzuraCastSong = {
   id: string;
   title: string;
@@ -20,9 +23,7 @@ export type AzuraCastNowPlaying = {
   streamUrl: string | null;
 };
 
-const AZURACAST_BASE_URL = 'https://azuracast-dquna-u78781.vm.elestio.app';
-const STATION_SHORTCODE = 'maranata';
-const FALLBACK_STREAM_URL = `${AZURACAST_BASE_URL}/listen/${STATION_SHORTCODE}/radio.mp3`;
+const { baseUrl, stationShortcode, fallbackStreamUrl } = appConfig.azuracast;
 
 export function cleanSongText(rawText: string | undefined | null): string {
   if (!rawText) return '';
@@ -44,7 +45,7 @@ export function cleanSongText(rawText: string | undefined | null): string {
 
 export async function getAzuraCastNowPlaying(): Promise<AzuraCastNowPlaying> {
   try {
-    const response = await fetch(`${AZURACAST_BASE_URL}/api/nowplaying/${STATION_SHORTCODE}`, {
+    const response = await fetch(`${baseUrl}/api/nowplaying/${stationShortcode}`, {
       cache: 'no-store',
     });
 
@@ -54,7 +55,7 @@ export async function getAzuraCastNowPlaying(): Promise<AzuraCastNowPlaying> {
         listenersCount: 0,
         currentSong: null,
         history: [],
-        streamUrl: FALLBACK_STREAM_URL,
+        streamUrl: fallbackStreamUrl,
       };
     }
 
@@ -81,7 +82,7 @@ export async function getAzuraCastNowPlaying(): Promise<AzuraCastNowPlaying> {
     const rawHistory = Array.isArray(data?.song_history) ? data.song_history : [];
     const history: AzuraCastHistoryItem[] = rawHistory
       .filter((item: any) => item?.song?.title || item?.song?.text)
-      .slice(0, 6)
+      .slice(0, playbackConfig.trackHistoryLimit)
       .map((item: any) => ({
         id: String(item.sh_id || item.song.id),
         playedAt: Number(item.played_at || 0),
@@ -99,7 +100,7 @@ export async function getAzuraCastNowPlaying(): Promise<AzuraCastNowPlaying> {
       listenersCount,
       currentSong,
       history,
-      streamUrl: data?.station?.listen_url || FALLBACK_STREAM_URL,
+      streamUrl: data?.station?.listen_url || fallbackStreamUrl,
     };
   } catch (error) {
     console.error('[AzuraCast] Error en nowplaying:', error);
@@ -108,7 +109,7 @@ export async function getAzuraCastNowPlaying(): Promise<AzuraCastNowPlaying> {
       listenersCount: 0,
       currentSong: null,
       history: [],
-      streamUrl: FALLBACK_STREAM_URL,
+      streamUrl: fallbackStreamUrl,
     };
   }
 }

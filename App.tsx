@@ -16,11 +16,15 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { InstrumentSans_400Regular, InstrumentSans_500Medium, InstrumentSans_600SemiBold, InstrumentSans_700Bold } from '@expo-google-fonts/instrument-sans';
 import { IBMPlexMono_500Medium, IBMPlexMono_600SemiBold } from '@expo-google-fonts/ibm-plex-mono';
+import { appConfig } from './src/config/app';
+import { brand } from './src/constants/brand';
+import { copy } from './src/constants/copy';
+import { AppTab, bottomNavigationItems, BottomNavigationIcon } from './src/constants/navigation';
+import { playbackConfig } from './src/constants/playback';
 import { AzuraCastHistoryItem, getAzuraCastNowPlaying } from './src/services/azuracast';
 import { ListenerSnapshot, sendListenerHeartbeat } from './src/services/listeners';
 import { tokens } from './src/theme/tokens';
 
-type AppTab = 'listen' | 'schedule' | 'church';
 type PlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'error';
 type Song = { title: string; artist: string; time: string; art?: string | null };
 
@@ -33,11 +37,10 @@ const fonts = {
   mono: 'IBMPlexMono_500Medium',
   monoSemi: 'IBMPlexMono_600SemiBold',
 };
-const churchWebsite = 'https://www.manantialdeavivamiento.com';
 const emptyListeners: ListenerSnapshot = { listeners: 0, countries: 0, locations: [], available: false };
 
 function formatPlayedAt(playedAt: number): string {
-  if (!playedAt) return '--:--';
+  if (!playedAt) return playbackConfig.defaultPlayedAtLabel;
   return new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(new Date(playedAt * 1000));
 }
 
@@ -59,7 +62,7 @@ export default function App() {
   const [listenerCount, setListenerCount] = useState(0);
   const [listenerSnapshot, setListenerSnapshot] = useState(emptyListeners);
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
-  const [currentTrack, setCurrentTrack] = useState<Song>({ title: 'Radio Maranata', artist: 'Cargando señal en vivo', time: '--:--' });
+  const [currentTrack, setCurrentTrack] = useState<Song>({ title: brand.name, artist: copy.playback.loadingSignal, time: playbackConfig.defaultPlayedAtLabel });
   const [history, setHistory] = useState<Song[]>([]);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const screenTransition = useRef(new Animated.Value(1)).current;
@@ -74,20 +77,20 @@ export default function App() {
       setStreamUrl(nowPlaying.streamUrl);
       if (nowPlaying.currentSong) {
         setCurrentTrack({
-          title: nowPlaying.currentSong.title || nowPlaying.currentSong.text || 'Tema sin título',
-          artist: nowPlaying.currentSong.artist || 'En vivo',
-          time: 'Ahora',
+          title: nowPlaying.currentSong.title || nowPlaying.currentSong.text || copy.playback.untitledTrack,
+          artist: nowPlaying.currentSong.artist || copy.playback.liveArtist,
+          time: copy.playback.now,
           art: nowPlaying.currentSong.art,
         });
       }
       setHistory(nowPlaying.history.map((item: AzuraCastHistoryItem) => ({
-        title: item.song.title || item.song.text || 'Tema sin título',
-        artist: item.song.artist || 'Radio Maranata',
+        title: item.song.title || item.song.text || copy.playback.untitledTrack,
+        artist: item.song.artist || brand.fallbackArtist,
         time: formatPlayedAt(item.playedAt),
       })));
     };
     loadNowPlaying();
-    const interval = setInterval(loadNowPlaying, 30000);
+    const interval = setInterval(loadNowPlaying, playbackConfig.nowPlayingPollMs);
     return () => { isMounted = false; clearInterval(interval); };
   }, []);
 
@@ -100,7 +103,7 @@ export default function App() {
     if (!isPlaying) return;
     const sendHeartbeat = async () => setListenerSnapshot(await sendListenerHeartbeat());
     sendHeartbeat();
-    const interval = setInterval(sendHeartbeat, 30000);
+    const interval = setInterval(sendHeartbeat, playbackConfig.listenerHeartbeatMs);
     return () => clearInterval(interval);
   }, [isPlaying]);
 
@@ -131,7 +134,7 @@ export default function App() {
       console.error('[Radio] Error al reproducir el stream:', error);
       setIsPlaying(false);
       setPlaybackStatus('error');
-      setPlaybackError('No pudimos iniciar la radio.');
+      setPlaybackError(copy.playback.retryError);
     } finally {
       setIsLoading(false);
     }
@@ -184,20 +187,20 @@ function ListenScreen({ currentTrack, isLoading, isOnline, isPlaying, playbackSt
   const haloOpacity = breathe.interpolate({ inputRange: [0, 1], outputRange: [0, 0.22] });
   const buttonLabel = isLoading ? 'Conectando' : isPlaying ? 'Pausar radio' : playbackStatus === 'error' ? 'Reintentar radio' : 'Reproducir radio';
   const listenerText = listenerCount > 1 ? `${listenerCount.toLocaleString('es-AR')}${listenerCountries > 0 ? ` · ${listenerCountries} países` : ''}` : 'En vivo';
-  const playbackText = playbackError || (isPlaying ? 'Reproduciendo' : streamReady ? 'Lista para escuchar' : 'Conectando señal');
+  const playbackText = playbackError || (isPlaying ? copy.playback.playing : streamReady ? copy.playback.readyToListen : copy.playback.connectingSignal);
 
   return (
     <View style={styles.listenScreen}>
       <View style={styles.warmAura} />
       <View style={styles.listenHeader}>
-        <View style={styles.brandLockup}><Text style={styles.wordmark}>MARANATA</Text><Text style={styles.frequency}>FM 89.3</Text></View>
+        <View style={styles.brandLockup}><Text style={styles.wordmark}>{brand.wordmark}</Text><Text style={styles.frequency}>{brand.frequency}</Text></View>
         <View style={styles.signalMark}><View style={[styles.signalDot, isOnline && styles.signalDotActive]} /></View>
       </View>
 
       <View style={styles.listenBody}>
         <Animated.View style={[styles.radioConsole, { transform: [{ scale: consoleScale }] }]}> 
-          <Text style={styles.consoleFrequency}>89.3</Text>
-          <Text style={styles.consoleLabel}>Radio Maranata</Text>
+          <Text style={styles.consoleFrequency}>{brand.frequencyShort}</Text>
+          <Text style={styles.consoleLabel}>{brand.stationLabel}</Text>
           <Text style={styles.consoleStatus}>{playbackText}</Text>
           <View style={styles.playArea}>
             <Animated.View style={[styles.playHalo, { opacity: isPlaying ? haloOpacity : 0, transform: [{ scale: haloScale }] }]} />
@@ -216,7 +219,7 @@ function ListenScreen({ currentTrack, isLoading, isOnline, isPlaying, playbackSt
       </View>
 
       <View style={styles.listenersRow}>
-        <Text style={styles.programName}>OYENTES</Text>
+        <Text style={styles.programName}>{copy.listeners.label}</Text>
         <Text style={styles.listenersText}>{listenerText}</Text>
       </View>
     </View>
@@ -225,27 +228,26 @@ function ListenScreen({ currentTrack, isLoading, isOnline, isPlaying, playbackSt
 
 type ScheduleProps = { history: Song[]; currentTrack: Song; isPlaying: boolean; onGoToListen: () => void };
 function ScheduleScreen({ history, currentTrack, isPlaying, onGoToListen }: ScheduleProps) {
-  const songs = history.length ? history.slice(0, 6) : [{ title: 'Esperando historial musical', artist: 'Radio Maranata', time: '--:--' }];
+  const songs = history.length ? history.slice(0, playbackConfig.trackHistoryLimit) : [{ title: copy.tracks.emptyTitle, artist: brand.fallbackArtist, time: playbackConfig.defaultPlayedAtLabel }];
   return <ScrollView contentContainerStyle={styles.contentScreen} showsVerticalScrollIndicator={false}>
-    <Text style={styles.screenEyebrow}>SEÑAL / HISTORIAL</Text><Text style={styles.screenTitle}>Tracks</Text><Text style={styles.screenLead}>Lo mínimo útil: el tema actual y las canciones recientes.</Text>
-    <View style={styles.signalPanel}><View style={styles.signalHeader}><View style={styles.nowScheduleLiveDot} /><Text style={styles.nowScheduleLabel}>{isPlaying ? 'SONANDO AHORA' : 'RADIO DISPONIBLE'}</Text></View><Text style={styles.signalTitle} numberOfLines={2}>{currentTrack.title}</Text><Text style={styles.signalArtist} numberOfLines={1}>{currentTrack.artist}</Text><Pressable onPress={onGoToListen} accessibilityRole="button" style={styles.signalAction}><Ionicons name="radio-outline" size={17} color={colors.bg} /><Text style={styles.signalActionText}>Abrir radio</Text></Pressable></View>
-    <View style={styles.historyHeader}><Text style={styles.sectionTitle}>Recientes</Text><Text style={styles.historyMeta}>Auto</Text></View><View style={styles.trackList}>{songs.map((song, index) => <View key={`${song.title}-${index}`} style={styles.trackRow}><Text style={styles.trackIndex}>{String(index + 1).padStart(2, '0')}</Text><View style={styles.songCopy}><Text style={styles.songTitle} numberOfLines={1}>{song.title}</Text><Text style={styles.songArtist} numberOfLines={1}>{song.artist}</Text></View><Text style={styles.songTime}>{song.time}</Text></View>)}</View>
+    <Text style={styles.screenEyebrow}>{copy.tracks.eyebrow}</Text><Text style={styles.screenTitle}>{copy.tracks.title}</Text><Text style={styles.screenLead}>{copy.tracks.lead}</Text>
+    <View style={styles.signalPanel}><View style={styles.signalHeader}><View style={styles.nowScheduleLiveDot} /><Text style={styles.nowScheduleLabel}>{isPlaying ? copy.tracks.currentPlaying : copy.tracks.currentAvailable}</Text></View><Text style={styles.signalTitle} numberOfLines={2}>{currentTrack.title}</Text><Text style={styles.signalArtist} numberOfLines={1}>{currentTrack.artist}</Text><Pressable onPress={onGoToListen} accessibilityRole="button" style={styles.signalAction}><Ionicons name="radio-outline" size={17} color={colors.bg} /><Text style={styles.signalActionText}>{copy.tracks.openRadio}</Text></Pressable></View>
+    <View style={styles.historyHeader}><Text style={styles.sectionTitle}>{copy.tracks.recentTitle}</Text><Text style={styles.historyMeta}>{copy.tracks.historyMode}</Text></View><View style={styles.trackList}>{songs.map((song, index) => <View key={`${song.title}-${index}`} style={styles.trackRow}><Text style={styles.trackIndex}>{String(index + 1).padStart(2, '0')}</Text><View style={styles.songCopy}><Text style={styles.songTitle} numberOfLines={1}>{song.title}</Text><Text style={styles.songArtist} numberOfLines={1}>{song.artist}</Text></View><Text style={styles.songTime}>{song.time}</Text></View>)}</View>
   </ScrollView>;
 }
 
 function ChurchScreen() {
   return <ScrollView contentContainerStyle={styles.contentScreen} showsVerticalScrollIndicator={false}>
-    <Text style={styles.screenEyebrow}>COMUNIDAD</Text><Text style={styles.screenTitle}>Iglesia</Text><Text style={styles.screenLead}>La base espiritual y comunitaria detrás de Radio Maranata.</Text>
-    <View style={styles.infoSurface}><Ionicons name="heart-outline" size={22} color={colors.accent} /><Text style={styles.infoTitle}>Manantial de Avivamiento</Text><Text style={styles.infoText}>Conocé actividades, horarios y canales oficiales de la iglesia.</Text><Pressable accessibilityRole="link" onPress={() => Linking.openURL(churchWebsite)} style={styles.websiteButton}><Text style={styles.websiteText}>Visitar sitio web</Text><Ionicons name="arrow-up-outline" size={16} color={colors.accent} /></Pressable></View>
+    <Text style={styles.screenEyebrow}>{copy.church.eyebrow}</Text><Text style={styles.screenTitle}>{copy.church.title}</Text><Text style={styles.screenLead}>{copy.church.lead}</Text>
+    <View style={styles.infoSurface}><Ionicons name="heart-outline" size={22} color={colors.accent} /><Text style={styles.infoTitle}>{copy.church.name}</Text><Text style={styles.infoText}>{copy.church.description}</Text><Pressable accessibilityRole="link" onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={styles.websiteButton}><Text style={styles.websiteText}>{copy.church.websiteAction}</Text><Ionicons name="arrow-up-outline" size={16} color={colors.accent} /></Pressable></View>
   </ScrollView>;
 }
 
 function BottomNavigation({ activeTab, isPlaying, onTabChange }: { activeTab: AppTab; isPlaying: boolean; onTabChange: (tab: AppTab) => void }) {
-  const tabs: { id: AppTab; label: string; icon: 'albums-outline' | 'radio-outline' | 'heart-outline' }[] = [{ id: 'schedule', label: 'Tracks', icon: 'albums-outline' }, { id: 'listen', label: 'Radio', icon: 'radio-outline' }, { id: 'church', label: 'Iglesia', icon: 'heart-outline' }];
-  return <View style={styles.navDock}>{tabs.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} onPress={() => onTabChange(tab.id)} />)}</View>;
+  return <View style={styles.navDock}>{bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} onPress={() => onTabChange(tab.id)} />)}</View>;
 }
 
-function NavItem({ tab, active, isPlaying, onPress }: { tab: { id: AppTab; label: string; icon: 'albums-outline' | 'radio-outline' | 'heart-outline' }; active: boolean; isPlaying: boolean; onPress: () => void }) {
+function NavItem({ tab, active, isPlaying, onPress }: { tab: { id: AppTab; label: string; icon: BottomNavigationIcon }; active: boolean; isPlaying: boolean; onPress: () => void }) {
   const scale = useRef(new Animated.Value(1)).current;
   return <Animated.View style={[styles.navItem, { transform: [{ scale }] }]}><Pressable accessibilityRole="tab" accessibilityState={{ selected: active }} aria-selected={active} accessibilityLabel={tab.label} onPress={onPress} onPressIn={() => Animated.spring(scale, { toValue: 0.985, useNativeDriver: true }).start()} onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()} style={[styles.navTap, active && styles.navTapActive]}><View style={styles.navIconWrap}><Ionicons name={tab.icon} size={tab.id === 'listen' ? 22 : 20} color={active ? colors.text : colors.textTertiary} />{isPlaying && <View style={styles.navPlayingDot} />}</View><Text style={[styles.navLabel, active && styles.navLabelActive]}>{tab.label}</Text></Pressable></Animated.View>;
 }

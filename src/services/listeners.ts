@@ -1,3 +1,5 @@
+import { appConfig } from '../config/app';
+
 export type ListenerCountry = {
   country: string;
   flag: string;
@@ -20,7 +22,7 @@ const emptySnapshot: ListenerSnapshot = {
 };
 
 const sessionId = `radio-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-const endpoint = process.env.EXPO_PUBLIC_LISTENERS_API_URL;
+const endpoint = appConfig.listeners.apiUrl;
 
 export async function sendListenerHeartbeat(): Promise<ListenerSnapshot> {
   if (!endpoint) return emptySnapshot;

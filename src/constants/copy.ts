@@ -1,0 +1,35 @@
+export const copy = {
+  playback: {
+    loadingSignal: 'Cargando señal en vivo',
+    connectingSignal: 'Conectando señal',
+    readyToListen: 'Lista para escuchar',
+    playing: 'Reproduciendo',
+    retryError: 'No pudimos iniciar la radio.',
+    untitledTrack: 'Tema sin título',
+    liveArtist: 'En vivo',
+    now: 'Ahora',
+  },
+  listeners: {
+    label: 'OYENTES',
+    fallback: 'En vivo',
+  },
+  tracks: {
+    eyebrow: 'SEÑAL / HISTORIAL',
+    title: 'Tracks',
+    lead: 'Lo mínimo útil: el tema actual y las canciones recientes.',
+    currentAvailable: 'RADIO DISPONIBLE',
+    currentPlaying: 'SONANDO AHORA',
+    openRadio: 'Abrir radio',
+    recentTitle: 'Recientes',
+    historyMode: 'Auto',
+    emptyTitle: 'Esperando historial musical',
+  },
+  church: {
+    eyebrow: 'COMUNIDAD',
+    title: 'Iglesia',
+    lead: 'La base espiritual y comunitaria detrás de Radio Maranata.',
+    name: 'Manantial de Avivamiento',
+    description: 'Conocé actividades, horarios y canales oficiales de la iglesia.',
+    websiteAction: 'Visitar sitio web',
+  },
+} as const;

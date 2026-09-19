@@ -31,9 +31,9 @@ function NavItem({ tab, active, isPlaying, onPress }: NavItemProps) {
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', left: 18, right: 18, bottom: 14, minHeight: 60, flexDirection: 'row', alignItems: 'center', borderRadius: 22, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: 6, paddingVertical: 6 },
+  navDock: { position: 'absolute', left: 18, right: 18, bottom: 14, minHeight: 60, flexDirection: 'row', alignItems: 'center', borderRadius: tokens.radius.panel, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: 6, paddingVertical: 6 },
   navItem: { flex: 1 },
-  navTap: { minHeight: 48, alignItems: 'center', justifyContent: 'center', gap: 4, borderRadius: 17 },
+  navTap: { minHeight: 48, alignItems: 'center', justifyContent: 'center', gap: 4, borderRadius: tokens.radius.card },
   navTapActive: { backgroundColor: colors.muted },
   navIconWrap: { width: 24, height: 22, alignItems: 'center', justifyContent: 'center' },
   navPlayingDot: { position: 'absolute', top: 0, right: 0, width: 5, height: 5, borderRadius: tokens.radius.pill, backgroundColor: colors.foreground },

@@ -83,8 +83,8 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
 }
 
 const styles = StyleSheet.create({
-  listenScreen: { flex: 1, paddingHorizontal: tokens.space[3], paddingTop: tokens.space[3], paddingBottom: 104, justifyContent: 'space-between', backgroundColor: colors.background, overflow: 'hidden' },
-  warmAura: { position: 'absolute', top: -90, right: -150, width: 320, height: 320, borderRadius: tokens.radius.pill, backgroundColor: colors.muted, opacity: 0.36 },
+  listenScreen: { flex: 1, paddingHorizontal: tokens.space[3], paddingTop: tokens.space[4], paddingBottom: 112, justifyContent: 'space-between', backgroundColor: colors.background, overflow: 'hidden' },
+  warmAura: { position: 'absolute', top: -110, right: -170, width: 320, height: 320, borderRadius: tokens.radius.pill, backgroundColor: colors.muted, opacity: 0.18 },
   listenHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: tokens.space[2] },
   brandLockup: { flex: 1 },
   wordmark: { color: colors.foreground, fontFamily: fonts.display, fontSize: 30, lineHeight: 32, fontWeight: '800', letterSpacing: -0.75 },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   signalDot: { width: 7, height: 7, borderRadius: tokens.radius.pill, backgroundColor: colors.foregroundSubtle },
   signalDotActive: { backgroundColor: colors.foreground },
   listenBody: { flex: 1, justifyContent: 'center', paddingTop: tokens.space[2] },
-  radioConsole: { width: '100%', minHeight: 328, borderRadius: tokens.radius.panel, alignItems: 'center', justifyContent: 'center', padding: tokens.space[3], backgroundColor: colors.surface, overflow: 'hidden', borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.artwork },
+  radioConsole: { width: '100%', minHeight: 340, borderRadius: tokens.radius.panel, alignItems: 'center', justifyContent: 'center', padding: tokens.space[4], backgroundColor: colors.surface, overflow: 'hidden', borderColor: colors.border, borderWidth: 1, boxShadow: tokens.shadow.panel },
   consoleStatus: { color: colors.foregroundSubtle, fontFamily: fonts.bodyMedium, fontSize: 13, marginTop: 10, textAlign: 'center' },
   consoleFrequency: { color: colors.foreground, fontFamily: fonts.display, fontSize: 84, lineHeight: 86, fontWeight: '800', letterSpacing: -2.1, textAlign: 'center' },
   consoleLabel: { color: colors.mutedForeground, fontFamily: fonts.bodyMedium, fontSize: 17, marginTop: 4, textAlign: 'center' },

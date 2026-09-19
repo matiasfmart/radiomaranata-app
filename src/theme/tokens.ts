@@ -60,14 +60,14 @@ export const tokens = {
     12: 96,
   },
   radius: {
-    compact: 8,
-    card: 12,
-    panel: 16,
+    compact: 4,
+    card: 6,
+    panel: 8,
     pill: 999,
   },
   shadow: {
-    floating: '0px 16px 34px rgba(10,10,10,0.18)',
-    artwork: '0px 18px 42px rgba(10,10,10,0.20)',
+    floating: '0px 8px 18px rgba(10,10,10,0.10)',
+    panel: '0px 8px 18px rgba(10,10,10,0.08)',
   },
   motion: {
     pressScale: 0.96,

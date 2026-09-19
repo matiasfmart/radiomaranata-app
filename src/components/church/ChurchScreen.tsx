@@ -17,11 +17,11 @@ export function ChurchScreen() {
 
 const styles = StyleSheet.create({
   contentScreen: { paddingHorizontal: tokens.space[3], paddingTop: tokens.space[6], paddingBottom: 200, backgroundColor: colors.background, minHeight: '100%' },
-  screenEyebrow: { color: colors.foregroundSubtle, fontFamily: fonts.monoSemi, fontSize: 12, marginBottom: 8 },
-  screenTitle: { color: colors.foreground, fontFamily: fonts.display, fontWeight: '700', fontSize: 40, lineHeight: 43 },
+  screenEyebrow: { color: colors.foregroundSubtle, fontFamily: fonts.detail, fontSize: 11, marginBottom: 8 },
+  screenTitle: { color: colors.foreground, fontFamily: fonts.display, fontWeight: '800', fontSize: 44, lineHeight: 46, letterSpacing: -1.1 },
   screenLead: { color: colors.mutedForeground, fontFamily: fonts.body, fontSize: 16, lineHeight: 23, marginTop: tokens.space[2] },
   infoSurface: { borderRadius: tokens.radius.card, backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, padding: tokens.space[3] },
-  infoTitle: { color: colors.foreground, fontFamily: fonts.display, fontWeight: '700', fontSize: 23, marginTop: 16 },
+  infoTitle: { color: colors.foreground, fontFamily: fonts.title, fontWeight: '700', fontSize: 24, lineHeight: 26, letterSpacing: -0.55, marginTop: 16 },
   infoText: { color: colors.mutedForeground, fontFamily: fonts.body, fontSize: 15, lineHeight: 22, marginTop: 8 },
   websiteButton: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: tokens.space[4], paddingTop: tokens.space[3], borderTopColor: colors.border, borderTopWidth: 1 },
   websiteText: { color: colors.foreground, fontFamily: fonts.bodySemi, fontSize: 14 },

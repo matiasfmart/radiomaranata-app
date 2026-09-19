@@ -1,8 +1,8 @@
 export const fontFamilies = {
-  display: 'InstrumentSans_700Bold',
-  body: 'InstrumentSans_400Regular',
-  bodyMedium: 'InstrumentSans_500Medium',
-  bodySemi: 'InstrumentSans_600SemiBold',
-  mono: 'IBMPlexMono_500Medium',
-  monoSemi: 'IBMPlexMono_600SemiBold',
+  display: 'Inter_800ExtraBold',
+  title: 'Inter_700Bold',
+  body: 'Inter_400Regular',
+  bodyMedium: 'Inter_500Medium',
+  bodySemi: 'Inter_700Bold',
+  detail: 'Inter_300Light',
 } as const;

@@ -4,6 +4,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { brand } from '../../constants/brand';
 import { copy } from '../../constants/copy';
 import { playbackConfig } from '../../constants/playback';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tokens } from '../../theme/tokens';
 import { Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
@@ -51,19 +52,21 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
 }
 
 // First-load stagger: fade + short rise, 40ms apart, once per mount only.
+// Reduced motion skips the delay/travel and just fades in together.
 function StaggeredRow({ index, children }: { index: number; children: React.ReactNode }) {
+  const reducedMotion = useReducedMotion();
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(progress, {
       toValue: 1,
       duration: tokens.motion.duration.medium,
-      delay: index * tokens.motion.staggerStep,
+      delay: reducedMotion ? 0 : index * tokens.motion.staggerStep,
       useNativeDriver: true,
     }).start();
-  }, [index, progress]);
+  }, [index, progress, reducedMotion]);
 
-  const translateY = progress.interpolate({ inputRange: [0, 1], outputRange: [tokens.motion.distance.sm, 0] });
+  const translateY = progress.interpolate({ inputRange: [0, 1], outputRange: [reducedMotion ? 0 : tokens.motion.distance.sm, 0] });
 
   return <Animated.View style={{ opacity: progress, transform: [{ translateY }] }}>{children}</Animated.View>;
 }

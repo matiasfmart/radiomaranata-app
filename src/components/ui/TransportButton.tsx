@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Animated, Pressable, StyleSheet } from 'react-native';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tokens } from '../../theme/tokens';
 
 type TransportButtonProps = {
@@ -14,11 +15,13 @@ type TransportButtonProps = {
 // The single most important control in the app. Icon morphs via crossfade +
 // scale instead of swapping instantly, and pulses a halo while playing.
 export function TransportButton({ playing, loading, disabled, accessibilityLabel, onPress }: TransportButtonProps) {
+  const reducedMotion = useReducedMotion();
   const pressScale = useRef(new Animated.Value(1)).current;
   const haloPulse = useRef(new Animated.Value(0)).current;
   const iconMorph = useRef(new Animated.Value(playing ? 1 : 0)).current;
 
   useEffect(() => {
+    if (reducedMotion) { haloPulse.setValue(0); return; }
     const loop = Animated.loop(Animated.sequence([
       Animated.timing(haloPulse, { toValue: 1, duration: tokens.motion.duration.slow * 2, useNativeDriver: true }),
       Animated.timing(haloPulse, { toValue: 0, duration: tokens.motion.duration.slow * 2, useNativeDriver: true }),
@@ -26,7 +29,7 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
     if (playing) loop.start();
     else { loop.stop(); haloPulse.setValue(0); }
     return () => loop.stop();
-  }, [haloPulse, playing]);
+  }, [haloPulse, playing, reducedMotion]);
 
   useEffect(() => {
     Animated.timing(iconMorph, {

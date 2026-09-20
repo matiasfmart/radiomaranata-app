@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tokens } from '../../theme/tokens';
 import { AppText } from './AppText';
 
@@ -14,9 +15,11 @@ type LiveIndicatorProps = {
 // The one shared "is this on air" signal. Used identically in the Radio
 // header and the Tracks status panel instead of two bespoke dot+label pairs.
 export function LiveIndicator({ active, label, colorize = true }: LiveIndicatorProps) {
+  const reducedMotion = useReducedMotion();
   const pulse = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (reducedMotion) { pulse.setValue(0); return; }
     const loop = Animated.loop(Animated.sequence([
       Animated.timing(pulse, { toValue: 1, duration: tokens.motion.duration.slow * 2, useNativeDriver: true }),
       Animated.timing(pulse, { toValue: 0, duration: tokens.motion.duration.slow * 2, useNativeDriver: true }),
@@ -24,7 +27,7 @@ export function LiveIndicator({ active, label, colorize = true }: LiveIndicatorP
     if (active) loop.start();
     else { loop.stop(); pulse.setValue(0); }
     return () => loop.stop();
-  }, [active, pulse]);
+  }, [active, pulse, reducedMotion]);
 
   const opacity = pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 0.35] });
   const isAccented = active && colorize;

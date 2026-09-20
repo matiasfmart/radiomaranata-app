@@ -29,8 +29,9 @@ export const tokens = {
       8: '#1F1F1F',
       9: '#0A0A0A',
     },
-    // Two full palettes, symmetric inversion. Accent keeps the same hue in
-    // both, but light mode uses a darker step to hold AA contrast on #FAFAFA.
+    // Two full palettes, symmetric inversion. Accent is a single translucent
+    // blue hue in both; accentForeground matches each theme's own foreground
+    // because the accent blends into whichever background sits behind it.
     light: {
       background: '#FAFAFA',
       foreground: '#0A0A0A',
@@ -42,9 +43,9 @@ export const tokens = {
       foregroundSubtle: '#767676',
       invertedBackground: '#0A0A0A',
       invertedForeground: '#FAFAFA',
-      accent: '#C33D32',
-      accentForeground: '#FAFAFA',
-      accentMuted: 'rgba(195,61,50,0.12)',
+      accent: 'rgba(59,130,246,0.5)',
+      accentForeground: '#0A0A0A',
+      accentMuted: 'rgba(59,130,246,0.12)',
       transparent: 'transparent',
     } satisfies ThemeColors,
     dark: {
@@ -58,9 +59,9 @@ export const tokens = {
       foregroundSubtle: '#767676',
       invertedBackground: '#FAFAFA',
       invertedForeground: '#0A0A0A',
-      accent: '#E5483B',
-      accentForeground: '#0A0A0A',
-      accentMuted: 'rgba(229,72,59,0.14)',
+      accent: 'rgba(59,130,246,0.5)',
+      accentForeground: '#FAFAFA',
+      accentMuted: 'rgba(59,130,246,0.16)',
       transparent: 'transparent',
     } satisfies ThemeColors,
   },

@@ -72,10 +72,10 @@ function NavItem({ tab, active, isPlaying, onPress }: NavItemProps) {
       style={styles.navTap}
     >
       <View style={styles.navIconWrap}>
-        <Ionicons name={tab.icon} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
+        <Ionicons name={tab.icon} size={tokens.icon.lg} color={active ? colors.accent : colors.foregroundSubtle} />
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      <AppText variant="label" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
+      <AppText variant="navigation" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
     </BubblePressable>
   );
 }

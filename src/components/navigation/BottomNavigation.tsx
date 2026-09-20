@@ -1,6 +1,6 @@
 import { Album, Heart, RadioReceiver, type LucideIcon } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Animated, Easing, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { AppTab, BottomNavigationIcon, bottomNavigationItems } from '../../constants/navigation';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme/ThemeContext';
@@ -11,7 +11,8 @@ import { BubblePressable } from '../ui/BubblePressable';
 import { VintageRadioIcon } from '../ui/VintageRadioIcon';
 
 const ACTIVE_BUBBLE_SIZE = 48;
-const ACTIVE_BUBBLE_WIDTH = 112;
+const NAV_ITEM_GAP = tokens.space.sm;
+const NAV_DOCK_PADDING = tokens.space.sm;
 const navIcons: Record<Exclude<BottomNavigationIcon, 'radio'>, LucideIcon> = { albums: Album, heart: Heart };
 
 type BottomNavigationProps = {
@@ -26,50 +27,68 @@ type NavItemProps = {
   isPlaying: boolean;
   itemWidth: number;
   showActiveLabel: boolean;
+  labelOpacity: Animated.Value;
   onPress: () => void;
 };
+
+function activeBubbleWidth(label: string) {
+  return Math.max(84, Math.min(100, 52 + label.length * 6));
+}
 
 export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNavigationProps) {
   const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
   const { width } = useWindowDimensions();
   const activeIndex = bottomNavigationItems.findIndex((tab) => tab.id === activeTab);
-  const bubblePosition = useRef(new Animated.Value(activeIndex)).current;
-  const itemWidth = (width - tokens.screenMargin * 2 - tokens.space.sm * 2) / bottomNavigationItems.length;
-  const showActiveLabel = itemWidth >= 88;
-  const bubbleWidth = showActiveLabel ? Math.min(ACTIVE_BUBBLE_WIDTH, itemWidth) : Math.min(ACTIVE_BUBBLE_SIZE, itemWidth);
-  const bubbleInset = tokens.space.sm + (itemWidth - bubbleWidth) / 2;
+  const activeItem = bottomNavigationItems[activeIndex];
+  const idealBubbleWidth = activeBubbleWidth(activeItem.label);
+  const compactDockWidth = NAV_DOCK_PADDING * 2 + ACTIVE_BUBBLE_SIZE * bottomNavigationItems.length + NAV_ITEM_GAP * (bottomNavigationItems.length - 1);
+  const expandedDockWidth = compactDockWidth - ACTIVE_BUBBLE_SIZE + idealBubbleWidth;
+  const showActiveLabel = width - tokens.screenMargin * 2 >= expandedDockWidth;
+  const targetBubbleWidth = showActiveLabel ? idealBubbleWidth : ACTIVE_BUBBLE_SIZE;
+  const targetDockWidth = compactDockWidth - ACTIVE_BUBBLE_SIZE + targetBubbleWidth;
+  const targetBubbleX = NAV_DOCK_PADDING + activeIndex * (ACTIVE_BUBBLE_SIZE + NAV_ITEM_GAP);
+  const bubbleX = useRef(new Animated.Value(targetBubbleX)).current;
+  const bubbleWidth = useRef(new Animated.Value(targetBubbleWidth)).current;
+  const dockWidth = useRef(new Animated.Value(targetDockWidth)).current;
+  const labelOpacity = useRef(new Animated.Value(showActiveLabel ? 1 : 0)).current;
 
   useEffect(() => {
     if (reducedMotion) {
-      bubblePosition.setValue(activeIndex);
+      bubbleX.setValue(targetBubbleX);
+      bubbleWidth.setValue(targetBubbleWidth);
+      dockWidth.setValue(targetDockWidth);
+      labelOpacity.setValue(showActiveLabel ? 1 : 0);
       return;
     }
-    Animated.spring(bubblePosition, {
-      toValue: activeIndex,
-      friction: 9,
-      tension: 60,
-      useNativeDriver: true,
-    }).start();
-  }, [activeIndex, bubblePosition, reducedMotion]);
-
-  const translateX = bubblePosition.interpolate({
-    inputRange: bottomNavigationItems.map((_, index) => index),
-    outputRange: bottomNavigationItems.map((_, index) => index * itemWidth),
-  });
+    labelOpacity.setValue(0);
+    Animated.parallel([
+      Animated.spring(bubbleX, { toValue: targetBubbleX, friction: 9, tension: 60, useNativeDriver: false }),
+      Animated.spring(bubbleWidth, { toValue: targetBubbleWidth, friction: 9, tension: 60, useNativeDriver: false }),
+      Animated.spring(dockWidth, { toValue: targetDockWidth, friction: 9, tension: 60, useNativeDriver: false }),
+    ]).start();
+    if (showActiveLabel) {
+      Animated.sequence([
+        Animated.delay(tokens.motion.duration.fast),
+        Animated.timing(labelOpacity, { toValue: 1, duration: tokens.motion.duration.medium, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+      ]).start();
+    }
+  }, [bubbleWidth, bubbleX, dockWidth, labelOpacity, reducedMotion, showActiveLabel, targetBubbleWidth, targetBubbleX, targetDockWidth]);
 
   return (
-    <View style={[styles.navDock, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+    <Animated.View style={[styles.navDock, { width: dockWidth, backgroundColor: colors.surface, borderColor: colors.border }]}>
       <Animated.View
         pointerEvents="none"
-        style={[styles.activeBubble, { left: bubbleInset, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accentMuted, transform: [{ translateX }] }]}
+        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accentMuted }]}
       />
-      {bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemWidth={itemWidth} showActiveLabel={showActiveLabel} onPress={() => onTabChange(tab.id)} />)}
-    </View>
+      <View style={styles.navItems}>
+        {bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemWidth={tab.id === activeTab ? targetBubbleWidth : ACTIVE_BUBBLE_SIZE} showActiveLabel={showActiveLabel} labelOpacity={labelOpacity} onPress={() => onTabChange(tab.id)} />)}
+      </View>
+    </Animated.View>
   );
 }
 
-function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, onPress }: NavItemProps) {
+function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, labelOpacity, onPress }: NavItemProps) {
   const { colors } = useTheme();
   return (
     <BubblePressable
@@ -88,14 +107,15 @@ function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, onPress }
           : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />}
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      {active && showActiveLabel && <AppText variant="label" tone="accent">{tab.label}</AppText>}
+      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" tone="accent">{tab.label}</AppText></Animated.View>}
     </BubblePressable>
   );
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', left: tokens.screenMargin, right: tokens.screenMargin, bottom: tokens.space.md, height: tokens.height.navigationDock, flexDirection: 'row', alignItems: 'center', borderRadius: tokens.radius.pill, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: tokens.space.sm, paddingVertical: tokens.space.sm },
-  activeBubble: { position: 'absolute', top: tokens.space.sm, borderRadius: tokens.radius.pill },
+  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', borderRadius: tokens.radius.pill, borderWidth: 1, boxShadow: tokens.shadow.floating, overflow: 'hidden' },
+  navItems: { width: '100%', height: ACTIVE_BUBBLE_SIZE, flexDirection: 'row', gap: NAV_ITEM_GAP, paddingHorizontal: NAV_DOCK_PADDING, zIndex: 1 },
+  activeBubble: { position: 'absolute', top: NAV_DOCK_PADDING, borderRadius: tokens.radius.pill },
   navItem: { zIndex: 1 },
   navTap: { height: ACTIVE_BUBBLE_SIZE, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.pill },
   navTapActive: { flexDirection: 'row', gap: tokens.space.sm },

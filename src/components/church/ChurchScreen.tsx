@@ -1,9 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import { ExternalLink, Heart } from 'lucide-react-native';
 import { Linking, StyleSheet, View } from 'react-native';
 import { appConfig } from '../../config/app';
 import { copy } from '../../constants/copy';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
+import { AppIcon } from '../ui/AppIcon';
 import { AppText } from '../ui/AppText';
 import { BubblePressable } from '../ui/BubblePressable';
 import { Screen } from '../ui/Screen';
@@ -16,12 +17,12 @@ export function ChurchScreen() {
       <ScreenHeader eyebrow={copy.church.eyebrow} title={copy.church.title} lead={copy.church.lead} />
 
       <View style={[styles.infoSurface, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <Ionicons name="heart" size={tokens.icon.lg} color={colors.foreground} />
+        <AppIcon icon={Heart} size={tokens.icon.lg} color={colors.foreground} />
         <AppText variant="headline" style={styles.infoTitle}>{copy.church.name}</AppText>
         <AppText variant="body" tone="muted" style={styles.infoText}>{copy.church.description}</AppText>
         <BubblePressable accessibilityRole="link" bubbleColor={colors.foregroundSubtle} onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={[styles.websiteButton, { borderTopColor: colors.border }]}>
           <AppText variant="label">{copy.church.websiteAction}</AppText>
-          <Ionicons name="open" size={tokens.icon.sm} color={colors.foreground} />
+          <AppIcon icon={ExternalLink} size={tokens.icon.sm} color={colors.foreground} />
         </BubblePressable>
       </View>
     </Screen>

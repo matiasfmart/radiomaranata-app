@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { RadioReceiver } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { brand } from '../../constants/brand';
@@ -8,6 +8,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { Song } from '../../types/radio';
+import { AppIcon } from '../ui/AppIcon';
 import { AppText } from '../ui/AppText';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { ListItem, PillButton } from '../ui/ListItem';
@@ -34,7 +35,7 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
         <AppText variant="title" numberOfLines={2} style={styles.signalTitle}>{currentTrack.title}</AppText>
         <AppText variant="body" tone="muted" numberOfLines={1} style={styles.signalArtist}>{currentTrack.artist}</AppText>
         <View style={styles.action}>
-          <PillButton label={copy.tracks.openRadio} icon={<Ionicons name="radio" size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
+          <PillButton label={copy.tracks.openRadio} icon={<AppIcon icon={RadioReceiver} size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
         </View>
       </View>
 

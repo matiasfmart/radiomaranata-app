@@ -1,9 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Pause, Play } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Animated, StyleSheet } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
+import { AppIcon } from './AppIcon';
 import { BubblePressable } from './BubblePressable';
 
 type TransportButtonProps = {
@@ -64,10 +65,10 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
         ) : (
           <>
             <Animated.View style={[styles.iconLayer, { opacity: playOpacity, transform: [{ scale: playScale }] }]}>
-              <Ionicons name="play" size={tokens.icon.lg} color={colors.accentForeground} />
+              <AppIcon icon={Play} size={tokens.icon.lg} color={colors.accentForeground} />
             </Animated.View>
             <Animated.View style={[styles.iconLayer, { opacity: pauseOpacity, transform: [{ scale: pauseScale }] }]}>
-              <Ionicons name="pause" size={tokens.icon.lg} color={colors.accentForeground} />
+              <AppIcon icon={Pause} size={tokens.icon.lg} color={colors.accentForeground} />
             </Animated.View>
           </>
         )}

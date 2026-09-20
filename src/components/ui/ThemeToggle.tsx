@@ -1,23 +1,24 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Moon, Smartphone, Sun, type LucideIcon } from 'lucide-react-native';
 import { useRef, useState } from 'react';
 import { Animated, Easing, GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { ThemeMode, useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
+import { AppIcon } from './AppIcon';
 import { AppText } from './AppText';
 
-type ModeIcon = 'sunny' | 'moon' | 'phone-portrait';
+type ModeIcon = LucideIcon;
 
 const options: { mode: ThemeMode; icon: ModeIcon; label: string; caption?: string }[] = [
-  { mode: 'light', icon: 'sunny', label: 'Claro' },
-  { mode: 'dark', icon: 'moon', label: 'Oscuro' },
-  { mode: 'system', icon: 'phone-portrait', label: 'Automático', caption: 'Sigue el tema del dispositivo' },
+  { mode: 'light', icon: Sun, label: 'Claro' },
+  { mode: 'dark', icon: Moon, label: 'Oscuro' },
+  { mode: 'system', icon: Smartphone, label: 'Automático', caption: 'Sigue el tema del dispositivo' },
 ];
 
 const modeIcon: Record<ThemeMode, ModeIcon> = {
-  light: 'sunny',
-  dark: 'moon',
-  system: 'phone-portrait',
+  light: Sun,
+  dark: Moon,
+  system: Smartphone,
 };
 
 const CLOSED_HEIGHT = tokens.height.minTouch;
@@ -67,7 +68,7 @@ export function ThemeToggle() {
     <View style={styles.anchor}>
       <Animated.View pointerEvents={open ? 'none' : 'auto'} style={[styles.trigger, { backgroundColor: colors.muted, opacity: triggerOpacity }]}>
         <Pressable accessibilityRole="button" accessibilityLabel={`Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`} onPress={toggle} style={styles.triggerTap}>
-          <Ionicons name={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
+          <AppIcon icon={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
         </Pressable>
       </Animated.View>
 
@@ -96,7 +97,7 @@ export function ThemeToggle() {
                     onPress={(event) => selectOption(option.mode, event)}
                     style={styles.row}
                   >
-                    <Ionicons name={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
+                    <AppIcon icon={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
                     <View style={styles.rowCopy}>
                       <AppText variant="label" tone={selected ? 'accent' : 'foreground'}>{option.label}</AppText>
                       {option.caption && <AppText variant="caption" tone="subtle">{option.caption}</AppText>}

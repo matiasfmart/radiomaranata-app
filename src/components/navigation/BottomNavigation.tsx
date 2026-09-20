@@ -8,10 +8,11 @@ import { tokens } from '../../theme/tokens';
 import { AppIcon } from '../ui/AppIcon';
 import { AppText } from '../ui/AppText';
 import { BubblePressable } from '../ui/BubblePressable';
+import { VintageRadioIcon } from '../ui/VintageRadioIcon';
 
 const ACTIVE_BUBBLE_SIZE = 48;
 const ACTIVE_BUBBLE_WIDTH = 112;
-const navIcons: Record<BottomNavigationIcon, LucideIcon> = { albums: Album, radio: RadioReceiver, heart: Heart };
+const navIcons: Record<Exclude<BottomNavigationIcon, 'radio'>, LucideIcon> = { albums: Album, heart: Heart };
 
 type BottomNavigationProps = {
   activeTab: AppTab;
@@ -24,6 +25,7 @@ type NavItemProps = {
   active: boolean;
   isPlaying: boolean;
   itemWidth: number;
+  showActiveLabel: boolean;
   onPress: () => void;
 };
 
@@ -34,7 +36,9 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
   const activeIndex = bottomNavigationItems.findIndex((tab) => tab.id === activeTab);
   const bubblePosition = useRef(new Animated.Value(activeIndex)).current;
   const itemWidth = (width - tokens.screenMargin * 2 - tokens.space.sm * 2) / bottomNavigationItems.length;
-  const bubbleInset = tokens.space.sm + (itemWidth - ACTIVE_BUBBLE_WIDTH) / 2;
+  const showActiveLabel = itemWidth >= 88;
+  const bubbleWidth = showActiveLabel ? Math.min(ACTIVE_BUBBLE_WIDTH, itemWidth) : Math.min(ACTIVE_BUBBLE_SIZE, itemWidth);
+  const bubbleInset = tokens.space.sm + (itemWidth - bubbleWidth) / 2;
 
   useEffect(() => {
     if (reducedMotion) {
@@ -58,16 +62,15 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
     <View style={[styles.navDock, { backgroundColor: colors.surface, borderColor: colors.border }]}>
       <Animated.View
         pointerEvents="none"
-        style={[styles.activeBubble, { left: bubbleInset, width: ACTIVE_BUBBLE_WIDTH, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accentMuted, transform: [{ translateX }] }]}
+        style={[styles.activeBubble, { left: bubbleInset, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accentMuted, transform: [{ translateX }] }]}
       />
-      {bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemWidth={itemWidth} onPress={() => onTabChange(tab.id)} />)}
+      {bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemWidth={itemWidth} showActiveLabel={showActiveLabel} onPress={() => onTabChange(tab.id)} />)}
     </View>
   );
 }
 
-function NavItem({ tab, active, isPlaying, itemWidth, onPress }: NavItemProps) {
+function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, onPress }: NavItemProps) {
   const { colors } = useTheme();
-  const Icon = navIcons[tab.icon];
   return (
     <BubblePressable
       accessibilityLabel={tab.label}
@@ -77,13 +80,15 @@ function NavItem({ tab, active, isPlaying, itemWidth, onPress }: NavItemProps) {
       bubbleColor={active ? colors.accent : colors.foregroundSubtle}
       containerStyle={[styles.navItem, { width: itemWidth }]}
       onPress={onPress}
-      style={[styles.navTap, active && styles.navTapActive]}
+      style={[styles.navTap, active && showActiveLabel && styles.navTapActive]}
     >
       <View style={styles.navIconWrap}>
-        <AppIcon icon={Icon} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
+        {tab.icon === 'radio'
+          ? <VintageRadioIcon size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
+          : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />}
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      {active && <AppText variant="label" tone="accent">{tab.label}</AppText>}
+      {active && showActiveLabel && <AppText variant="label" tone="accent">{tab.label}</AppText>}
     </BubblePressable>
   );
 }

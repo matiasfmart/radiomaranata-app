@@ -22,10 +22,11 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
 
 const CLOSED_SIZE = tokens.height.minTouch;
 const PANEL_WIDTH = 208;
+const PANEL_HEIGHT = tokens.height.minTouch * options.length + tokens.space.xs * 2;
 
-// Same circle, same spot: it never leaves this component's own local
-// overlay. No Modal, no separate window — just transform + opacity growing
-// out of the button's own corner, and shrinking back into it.
+// One button, one shape: the panel is anchored on the exact same corner as
+// the trigger and starts scaled down to its footprint, so it reads as the
+// circle itself stretching open — not a second element popping in.
 export function ThemeToggle() {
   const { mode, colors, setMode } = useTheme();
   const reducedMotion = useReducedMotion();
@@ -53,61 +54,70 @@ export function ThemeToggle() {
     animateTo(0, () => setOpen(false));
   };
 
-  const scale = progress.interpolate({ inputRange: [0, 1], outputRange: [0.25, 1] });
+  // Independent X/Y scale: at rest the panel's footprint exactly matches the
+  // trigger circle (same corner, same size), so it looks like one shape.
+  const scaleX = progress.interpolate({ inputRange: [0, 1], outputRange: [CLOSED_SIZE / PANEL_WIDTH, 1] });
+  const scaleY = progress.interpolate({ inputRange: [0, 1], outputRange: [CLOSED_SIZE / PANEL_HEIGHT, 1] });
+  const triggerOpacity = progress.interpolate({ inputRange: [0, 0.3], outputRange: [1, 0], extrapolate: 'clamp' });
+  const optionsOpacity = progress.interpolate({ inputRange: [0.55, 1], outputRange: [0, 1], extrapolate: 'clamp' });
 
   return (
     <View style={styles.anchor}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={open ? 'Cerrar selector de tema' : `Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`}
-        onPress={toggle}
-        style={[styles.trigger, { backgroundColor: colors.muted }]}
-      >
-        <Ionicons name={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
-      </Pressable>
+      <Animated.View pointerEvents={open ? 'none' : 'auto'} style={[styles.trigger, { backgroundColor: colors.muted, opacity: triggerOpacity }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel={`Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`} onPress={toggle} style={styles.triggerTap}>
+          <Ionicons name={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
+        </Pressable>
+      </Animated.View>
 
-      {open && (
-        <Animated.View
-          style={[
-            styles.panel,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-              opacity: progress,
-              transform: [{ scale }],
-              transformOrigin: 'top right',
-            } as never,
-          ]}
-        >
-          {options.map((option) => {
-            const selected = option.mode === mode;
-            return (
-              <Pressable
-                key={option.mode}
-                accessibilityRole="button"
-                accessibilityState={{ selected }}
-                onPress={(event) => selectOption(option.mode, event)}
-                style={styles.row}
-              >
-                <Ionicons name={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
-                <View style={styles.rowCopy}>
-                  <AppText variant="label" tone={selected ? 'accent' : 'foreground'}>{option.label}</AppText>
-                  {option.caption && <AppText variant="caption" tone="subtle">{option.caption}</AppText>}
-                </View>
-                {selected && <View style={[styles.selectedDot, { backgroundColor: colors.accent }]} />}
-              </Pressable>
-            );
-          })}
-        </Animated.View>
-      )}
+      <View pointerEvents={open ? 'auto' : 'none'} style={styles.panelHit}>
+        <Pressable accessibilityLabel="Cerrar selector de tema" onPress={toggle} style={styles.panelTap}>
+          <Animated.View
+            style={[
+              styles.panel,
+              {
+                backgroundColor: colors.muted,
+                borderColor: colors.border,
+                transform: [{ scaleX }, { scaleY }],
+                transformOrigin: 'top right',
+              } as never,
+            ]}
+          >
+            <Animated.View style={[styles.options, { opacity: optionsOpacity }]}>
+              {options.map((option) => {
+                const selected = option.mode === mode;
+                return (
+                  <Pressable
+                    key={option.mode}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected }}
+                    onPress={(event) => selectOption(option.mode, event)}
+                    style={styles.row}
+                  >
+                    <Ionicons name={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
+                    <View style={styles.rowCopy}>
+                      <AppText variant="label" tone={selected ? 'accent' : 'foreground'}>{option.label}</AppText>
+                      {option.caption && <AppText variant="caption" tone="subtle">{option.caption}</AppText>}
+                    </View>
+                    {selected && <View style={[styles.selectedDot, { backgroundColor: colors.accent }]} />}
+                  </Pressable>
+                );
+              })}
+            </Animated.View>
+          </Animated.View>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   anchor: { width: CLOSED_SIZE, height: CLOSED_SIZE },
-  trigger: { width: CLOSED_SIZE, height: CLOSED_SIZE, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
-  panel: { position: 'absolute', top: CLOSED_SIZE + tokens.space.xs, right: 0, width: PANEL_WIDTH, borderRadius: 22, borderWidth: 1, paddingVertical: tokens.space.xs, boxShadow: tokens.shadow.panel, zIndex: 50, elevation: 8 },
+  trigger: { position: 'absolute', top: 0, right: 0, width: CLOSED_SIZE, height: CLOSED_SIZE, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
+  triggerTap: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
+  panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 50, elevation: 8 },
+  panelTap: { width: '100%', height: '100%' },
+  panel: { width: '100%', height: '100%', borderRadius: 24, borderWidth: 1, boxShadow: tokens.shadow.panel },
+  options: { paddingVertical: tokens.space.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
   rowCopy: { flex: 1 },
   selectedDot: { width: 6, height: 6, borderRadius: tokens.radius.pill },

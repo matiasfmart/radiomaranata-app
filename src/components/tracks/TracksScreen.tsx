@@ -79,5 +79,5 @@ const styles = StyleSheet.create({
   signalArtist: { marginTop: tokens.space.xs },
   action: { marginTop: tokens.space.lg },
   historyHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: tokens.space.sm },
-  trackList: { borderRadius: tokens.radius.sm, overflow: 'hidden', borderWidth: 1 },
+  trackList: { borderRadius: tokens.radius.md, overflow: 'hidden', borderWidth: 1 },
 });

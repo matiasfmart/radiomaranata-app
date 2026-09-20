@@ -29,7 +29,7 @@ export function ChurchScreen() {
 }
 
 const styles = StyleSheet.create({
-  infoSurface: { borderRadius: tokens.radius.sm, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xxl },
+  infoSurface: { borderRadius: tokens.radius.md, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xxl },
   infoTitle: { marginTop: tokens.space.base },
   infoText: { marginTop: tokens.space.sm },
   websiteButton: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: tokens.space.lg, paddingTop: tokens.space.lg, borderTopWidth: 1, minHeight: tokens.height.minTouch },

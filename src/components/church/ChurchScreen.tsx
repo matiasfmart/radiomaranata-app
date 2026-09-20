@@ -16,12 +16,12 @@ export function ChurchScreen() {
       <ScreenHeader eyebrow={copy.church.eyebrow} title={copy.church.title} lead={copy.church.lead} />
 
       <View style={[styles.infoSurface, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <Ionicons name="heart-outline" size={tokens.icon.lg} color={colors.foreground} />
+        <Ionicons name="heart" size={tokens.icon.lg} color={colors.foreground} />
         <AppText variant="headline" style={styles.infoTitle}>{copy.church.name}</AppText>
         <AppText variant="body" tone="muted" style={styles.infoText}>{copy.church.description}</AppText>
         <BubblePressable accessibilityRole="link" bubbleColor={colors.foregroundSubtle} onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={[styles.websiteButton, { borderTopColor: colors.border }]}>
           <AppText variant="label">{copy.church.websiteAction}</AppText>
-          <Ionicons name="arrow-up-outline" size={tokens.icon.sm} color={colors.foreground} />
+          <Ionicons name="open" size={tokens.icon.sm} color={colors.foreground} />
         </BubblePressable>
       </View>
     </Screen>

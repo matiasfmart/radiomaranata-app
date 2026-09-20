@@ -34,7 +34,7 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
         <AppText variant="title" numberOfLines={2} style={styles.signalTitle}>{currentTrack.title}</AppText>
         <AppText variant="body" tone="muted" numberOfLines={1} style={styles.signalArtist}>{currentTrack.artist}</AppText>
         <View style={styles.action}>
-          <PillButton label={copy.tracks.openRadio} icon={<Ionicons name="radio-outline" size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
+          <PillButton label={copy.tracks.openRadio} icon={<Ionicons name="radio" size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
         </View>
       </View>
 

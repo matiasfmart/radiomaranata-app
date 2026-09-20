@@ -6,18 +6,18 @@ import { ThemeMode, useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { AppText } from './AppText';
 
-type ModeIcon = 'sunny-outline' | 'moon-outline' | 'phone-portrait-outline';
+type ModeIcon = 'sunny' | 'moon' | 'phone-portrait';
 
 const options: { mode: ThemeMode; icon: ModeIcon; label: string; caption?: string }[] = [
-  { mode: 'light', icon: 'sunny-outline', label: 'Claro' },
-  { mode: 'dark', icon: 'moon-outline', label: 'Oscuro' },
-  { mode: 'system', icon: 'phone-portrait-outline', label: 'Automático', caption: 'Sigue el tema del dispositivo' },
+  { mode: 'light', icon: 'sunny', label: 'Claro' },
+  { mode: 'dark', icon: 'moon', label: 'Oscuro' },
+  { mode: 'system', icon: 'phone-portrait', label: 'Automático', caption: 'Sigue el tema del dispositivo' },
 ];
 
 const modeIcon: Record<ThemeMode, ModeIcon> = {
-  light: 'sunny-outline',
-  dark: 'moon-outline',
-  system: 'phone-portrait-outline',
+  light: 'sunny',
+  dark: 'moon',
+  system: 'phone-portrait',
 };
 
 const CLOSED_HEIGHT = tokens.height.minTouch;

@@ -1,0 +1,59 @@
+import { useRef } from 'react';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { tokens } from '../../theme/tokens';
+import { AppText } from './AppText';
+
+type ListItemProps = {
+  index: string;
+  title: string;
+  subtitle: string;
+  trailing: string;
+};
+
+// One row shape for every list in the app. Fixed height token, same
+// left/right edges as everything else on screen.
+export function ListItem({ index, title, subtitle, trailing }: ListItemProps) {
+  return (
+    <View style={styles.row}>
+      <AppText variant="caption" tone="subtle" style={styles.index}>{index}</AppText>
+      <View style={styles.copy}>
+        <AppText variant="label" numberOfLines={1} style={styles.title}>{title}</AppText>
+        <AppText variant="caption" tone="muted" numberOfLines={1}>{subtitle}</AppText>
+      </View>
+      <AppText variant="caption" tone="subtle">{trailing}</AppText>
+    </View>
+  );
+}
+
+type PillButtonProps = {
+  label: string;
+  icon: React.ReactNode;
+  onPress: () => void;
+};
+
+// The single secondary CTA shape used across screens ("Abrir radio", etc).
+export function PillButton({ label, icon, onPress }: PillButtonProps) {
+  const scale = useRef(new Animated.Value(1)).current;
+  return (
+    <Animated.View style={{ transform: [{ scale }], alignSelf: 'flex-start' }}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onPress}
+        onPressIn={() => Animated.spring(scale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()}
+        onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()}
+        style={styles.pill}
+      >
+        {icon}
+        <AppText variant="label" tone="inverted">{label}</AppText>
+      </Pressable>
+    </Animated.View>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: { minHeight: tokens.height.listItem, flexDirection: 'row', alignItems: 'center', paddingHorizontal: tokens.space.base, borderBottomColor: tokens.color.border, borderBottomWidth: 1 },
+  index: { width: 32 },
+  copy: { flex: 1, paddingRight: tokens.space.base },
+  title: { marginBottom: 2 },
+  pill: { height: tokens.height.buttonSecondary, flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, borderRadius: tokens.radius.pill, backgroundColor: tokens.color.accent, paddingHorizontal: tokens.space.base },
+});

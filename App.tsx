@@ -21,7 +21,7 @@ export default function App() {
   const { currentTrack, history, isOnline, listenerCount, streamUrl } = useNowPlaying();
   const { isLoading, isPlaying, playbackError, playbackStatus, retryPlayback, togglePlayback } = useRadioPlayer(streamUrl);
   const listenerSnapshot = useListenerHeartbeat(isPlaying);
-  const { screenTransition, transitionY } = useScreenTransition(activeTab);
+  const { screenTransition, transitionX } = useScreenTransition(activeTab);
 
   if (!fontsLoaded) {
     return <View style={styles.loadingScreen}><ActivityIndicator color={colors.foreground} /></View>;
@@ -31,7 +31,7 @@ export default function App() {
     <View style={styles.root}>
       <StatusBar style="light" />
       <SafeAreaView style={styles.safeArea}>
-        <Animated.View style={[styles.screen, { opacity: screenTransition, transform: [{ translateY: transitionY }] }]}>
+        <Animated.View style={[styles.screen, { opacity: screenTransition, transform: [{ translateX: transitionX }] }]}>
           {activeTab === 'listen' && <RadioScreen currentTrack={currentTrack} isLoading={isLoading} isOnline={isOnline} isPlaying={isPlaying} playbackStatus={playbackStatus} playbackError={playbackError} listenerCount={listenerSnapshot.available ? listenerSnapshot.listeners : listenerCount} listenerCountries={listenerSnapshot.available ? listenerSnapshot.countries : 0} streamReady={Boolean(streamUrl)} onToggle={togglePlayback} onRetry={retryPlayback} />}
           {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} onGoToListen={() => setActiveTab('listen')} />}
           {activeTab === 'church' && <ChurchScreen />}

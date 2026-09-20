@@ -39,6 +39,11 @@ export const tokens = {
     invertedBackground: '#FAFAFA',
     invertedForeground: '#0A0A0A',
     transparent: 'transparent',
+    // Single accent hue in the whole app. Warm red, used only where color
+    // itself is the information (live/playing state, primary action).
+    accent: '#E5483B',
+    accentForeground: '#0A0A0A',
+    accentMuted: 'rgba(229,72,59,0.14)',
     cssVariables: {
       '--background': '#0A0A0A',
       '--foreground': '#FAFAFA',
@@ -46,32 +51,62 @@ export const tokens = {
       '--muted-foreground': '#BDBDBD',
       '--border': '#363636',
       '--surface': '#0F0F0F',
+      '--accent': '#E5483B',
+      '--accent-foreground': '#0A0A0A',
+      '--accent-muted': 'rgba(229,72,59,0.14)',
     },
   },
+  // Closed 4px-base spacing scale. Nothing outside this set.
   space: {
-    1: 8,
-    2: 16,
-    3: 24,
-    4: 32,
-    5: 40,
-    6: 48,
-    8: 64,
-    10: 80,
-    12: 96,
+    xs: 4,
+    sm: 8,
+    md: 12,
+    base: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+    xxxl: 64,
   },
+  // Exactly 3 radii: small, medium, pill.
   radius: {
-    compact: 4,
-    card: 6,
-    panel: 8,
+    sm: 8,
+    md: 16,
     pill: 999,
   },
+  // Exactly 3 icon sizes, one stroke weight (outline icon set) throughout.
+  icon: {
+    sm: 16,
+    md: 20,
+    lg: 24,
+  },
+  // Standard control heights. Every pressable respects the 44px minimum.
+  height: {
+    buttonPrimary: 72,
+    buttonSecondary: 44,
+    chip: 32,
+    listItem: 56,
+    searchField: 48,
+    minTouch: 44,
+  },
+  // Single lateral margin token used by every screen.
+  screenMargin: 24,
   shadow: {
     floating: '0px 8px 18px rgba(10,10,10,0.10)',
     panel: '0px 8px 18px rgba(10,10,10,0.08)',
   },
   motion: {
+    duration: {
+      fast: 120,
+      medium: 220,
+      slow: 360,
+    },
+    distance: {
+      sm: 8,
+      md: 16,
+    },
     pressScale: 0.96,
-    screenDuration: 420,
-    screenDelay: 70,
+    screenDuration: 220,
+    screenDelay: 0,
+    staggerStep: 40,
   },
 } as const;

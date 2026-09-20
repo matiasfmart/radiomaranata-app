@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { appConfig } from '../../config/app';
 import { copy } from '../../constants/copy';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { AppText } from '../ui/AppText';
+import { BubblePressable } from '../ui/BubblePressable';
 import { Screen } from '../ui/Screen';
 import { ScreenHeader } from '../ui/ScreenHeader';
 
@@ -18,10 +19,10 @@ export function ChurchScreen() {
         <Ionicons name="heart-outline" size={tokens.icon.lg} color={colors.foreground} />
         <AppText variant="headline" style={styles.infoTitle}>{copy.church.name}</AppText>
         <AppText variant="body" tone="muted" style={styles.infoText}>{copy.church.description}</AppText>
-        <Pressable accessibilityRole="link" onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={[styles.websiteButton, { borderTopColor: colors.border }]}>
+        <BubblePressable accessibilityRole="link" bubbleColor={colors.foregroundSubtle} onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={[styles.websiteButton, { borderTopColor: colors.border }]}>
           <AppText variant="label">{copy.church.websiteAction}</AppText>
           <Ionicons name="arrow-up-outline" size={tokens.icon.sm} color={colors.foreground} />
-        </Pressable>
+        </BubblePressable>
       </View>
     </Screen>
   );

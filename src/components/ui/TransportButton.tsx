@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
-import { ActivityIndicator, Animated, Pressable, StyleSheet } from 'react-native';
+import { ActivityIndicator, Animated, StyleSheet } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
+import { BubblePressable } from './BubblePressable';
 
 type TransportButtonProps = {
   playing: boolean;
@@ -18,7 +19,6 @@ type TransportButtonProps = {
 export function TransportButton({ playing, loading, disabled, accessibilityLabel, onPress }: TransportButtonProps) {
   const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
-  const pressScale = useRef(new Animated.Value(1)).current;
   const haloPulse = useRef(new Animated.Value(0)).current;
   const iconMorph = useRef(new Animated.Value(playing ? 1 : 0)).current;
 
@@ -51,30 +51,27 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
   return (
     <Animated.View style={styles.area}>
       <Animated.View style={[styles.halo, { backgroundColor: colors.accent, opacity: playing ? haloOpacity : 0, transform: [{ scale: haloScale }] }]} />
-      <Animated.View style={{ transform: [{ scale: pressScale }] }}>
-        <Pressable
-          accessibilityLabel={accessibilityLabel}
-          accessibilityRole="button"
-          disabled={disabled}
-          onPress={onPress}
-          onPressIn={() => Animated.spring(pressScale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()}
-          onPressOut={() => Animated.spring(pressScale, { toValue: 1, useNativeDriver: true }).start()}
-          style={[styles.button, { backgroundColor: colors.accent }, disabled && styles.buttonDisabled]}
-        >
-          {loading ? (
-            <ActivityIndicator color={colors.accentForeground} />
-          ) : (
-            <>
-              <Animated.View style={[styles.iconLayer, { opacity: playOpacity, transform: [{ scale: playScale }] }]}>
-                <Ionicons name="play" size={tokens.icon.lg} color={colors.accentForeground} />
-              </Animated.View>
-              <Animated.View style={[styles.iconLayer, { opacity: pauseOpacity, transform: [{ scale: pauseScale }] }]}>
-                <Ionicons name="pause" size={tokens.icon.lg} color={colors.accentForeground} />
-              </Animated.View>
-            </>
-          )}
-        </Pressable>
-      </Animated.View>
+      <BubblePressable
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        bubbleColor={colors.accent}
+        disabled={disabled}
+        onPress={onPress}
+        style={[styles.button, { backgroundColor: colors.accent }, disabled && styles.buttonDisabled]}
+      >
+        {loading ? (
+          <ActivityIndicator color={colors.accentForeground} />
+        ) : (
+          <>
+            <Animated.View style={[styles.iconLayer, { opacity: playOpacity, transform: [{ scale: playScale }] }]}>
+              <Ionicons name="play" size={tokens.icon.lg} color={colors.accentForeground} />
+            </Animated.View>
+            <Animated.View style={[styles.iconLayer, { opacity: pauseOpacity, transform: [{ scale: pauseScale }] }]}>
+              <Ionicons name="pause" size={tokens.icon.lg} color={colors.accentForeground} />
+            </Animated.View>
+          </>
+        )}
+      </BubblePressable>
     </Animated.View>
   );
 }

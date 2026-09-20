@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { AppText } from './AppText';
+import { BubblePressable } from './BubblePressable';
 
 type ListItemProps = {
   index: string;
@@ -36,20 +36,11 @@ type PillButtonProps = {
 // The single secondary CTA shape used across screens ("Abrir radio", etc).
 export function PillButton({ label, icon, onPress }: PillButtonProps) {
   const { colors } = useTheme();
-  const scale = useRef(new Animated.Value(1)).current;
   return (
-    <Animated.View style={{ transform: [{ scale }], alignSelf: 'flex-start' }}>
-      <Pressable
-        accessibilityRole="button"
-        onPress={onPress}
-        onPressIn={() => Animated.spring(scale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()}
-        onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()}
-        style={[styles.pill, { backgroundColor: colors.accent }]}
-      >
-        {icon}
-        <AppText variant="label" tone="inverted">{label}</AppText>
-      </Pressable>
-    </Animated.View>
+    <BubblePressable accessibilityRole="button" bubbleColor={colors.accent} containerStyle={styles.pillContainer} onPress={onPress} style={[styles.pill, { backgroundColor: colors.accent }]}>
+      {icon}
+      <AppText variant="label" tone="inverted">{label}</AppText>
+    </BubblePressable>
   );
 }
 
@@ -58,5 +49,6 @@ const styles = StyleSheet.create({
   index: { width: 32 },
   copy: { flex: 1, paddingRight: tokens.space.base },
   title: { marginBottom: 2 },
+  pillContainer: { alignSelf: 'flex-start' },
   pill: { height: tokens.height.buttonSecondary, flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, borderRadius: tokens.radius.pill, paddingHorizontal: tokens.space.base },
 });

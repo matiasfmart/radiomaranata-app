@@ -41,9 +41,9 @@ export function ThemeToggle() {
       return;
     }
     if (toValue === 1) {
-      Animated.spring(progress, { toValue, useNativeDriver: true, friction: 8, tension: 90 }).start();
+      Animated.spring(progress, { toValue, useNativeDriver: true, friction: 9, tension: 60 }).start();
     } else {
-      Animated.timing(progress, { toValue, duration: tokens.motion.duration.medium, easing: Easing.in(Easing.cubic), useNativeDriver: true }).start(onDone);
+      Animated.timing(progress, { toValue, duration: tokens.motion.duration.slow, easing: Easing.inOut(Easing.cubic), useNativeDriver: true }).start(onDone);
     }
   };
 

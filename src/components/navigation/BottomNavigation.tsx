@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRef } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { AppTab, BottomNavigationIcon, bottomNavigationItems } from '../../constants/navigation';
 import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { AppText } from '../ui/AppText';
+import { BubblePressable } from '../ui/BubblePressable';
 
 type BottomNavigationProps = {
   activeTab: AppTab;
@@ -30,26 +30,23 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
 
 function NavItem({ tab, active, isPlaying, onPress }: NavItemProps) {
   const { colors } = useTheme();
-  const scale = useRef(new Animated.Value(1)).current;
   return (
-    <Animated.View style={[styles.navItem, { transform: [{ scale }] }]}>
-      <Pressable
-        accessibilityRole="tab"
-        accessibilityState={{ selected: active }}
-        aria-selected={active}
-        accessibilityLabel={tab.label}
-        onPress={onPress}
-        onPressIn={() => Animated.spring(scale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()}
-        onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start()}
-        style={styles.navTap}
-      >
-        <View style={styles.navIconWrap}>
-          <Ionicons name={tab.icon} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
-          {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
-        </View>
-        <AppText variant="caption" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
-      </Pressable>
-    </Animated.View>
+    <BubblePressable
+      accessibilityLabel={tab.label}
+      accessibilityRole="tab"
+      accessibilityState={{ selected: active }}
+      aria-selected={active}
+      bubbleColor={active ? colors.accent : colors.foregroundSubtle}
+      containerStyle={styles.navItem}
+      onPress={onPress}
+      style={styles.navTap}
+    >
+      <View style={styles.navIconWrap}>
+        <Ionicons name={tab.icon} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
+        {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
+      </View>
+      <AppText variant="caption" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
+    </BubblePressable>
   );
 }
 

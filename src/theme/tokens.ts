@@ -105,18 +105,20 @@ export const tokens = {
   },
   motion: {
     duration: {
-      fast: 120,
-      medium: 220,
-      slow: 360,
+      fast: 160,
+      medium: 320,
+      slow: 480,
     },
     distance: {
       sm: 8,
       md: 16,
     },
-    pressScale: 0.96,
-    screenDuration: 220,
+    pressScale: 0.94,
+    bubbleScale: 1.1,
+    bubbleOpacity: 0.14,
+    screenDuration: 320,
     screenDelay: 0,
-    staggerStep: 40,
+    staggerStep: 60,
   },
 } as const;
 

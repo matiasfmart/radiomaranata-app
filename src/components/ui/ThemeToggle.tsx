@@ -21,7 +21,7 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
 };
 
 const CLOSED_HEIGHT = tokens.height.minTouch;
-const CLOSED_WIDTH = 112;
+const CLOSED_WIDTH = CLOSED_HEIGHT;
 const PANEL_WIDTH = 208;
 const PANEL_HEIGHT = CLOSED_HEIGHT * options.length + tokens.space.xs * 2;
 
@@ -68,7 +68,6 @@ export function ThemeToggle() {
       <Animated.View pointerEvents={open ? 'none' : 'auto'} style={[styles.trigger, { backgroundColor: colors.muted, opacity: triggerOpacity }]}>
         <Pressable accessibilityRole="button" accessibilityLabel={`Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`} onPress={toggle} style={styles.triggerTap}>
           <Ionicons name={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
-          <AppText variant="caption" tone="subtle">{options.find((option) => option.mode === mode)?.label}</AppText>
         </Pressable>
       </Animated.View>
 
@@ -117,7 +116,7 @@ export function ThemeToggle() {
 const styles = StyleSheet.create({
   anchor: { width: CLOSED_WIDTH, height: CLOSED_HEIGHT },
   trigger: { position: 'absolute', top: 0, right: 0, width: CLOSED_WIDTH, height: CLOSED_HEIGHT, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
-  triggerTap: { width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: tokens.space.xs, paddingHorizontal: tokens.space.md },
+  triggerTap: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
   panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 50, elevation: 8 },
   panelTap: { width: '100%', height: '100%' },
   panel: { width: '100%', height: '100%', borderRadius: 24, borderWidth: 1, boxShadow: tokens.shadow.panel },

@@ -81,7 +81,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 },
   brandLockup: { flex: 1 },
   frequencyLabel: { marginTop: tokens.space.xs },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.base },

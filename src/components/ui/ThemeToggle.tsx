@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
-import { Animated, Easing, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Easing, GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { ThemeMode, useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
@@ -20,14 +20,16 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
   system: 'phone-portrait-outline',
 };
 
-// Options unfurl out of this same button and collapse back into it. No
-// backdrop dimming, no layout shift — it never touches the screen underneath.
+const CLOSED_SIZE = tokens.height.minTouch;
+const PANEL_WIDTH = 208;
+
+// Same circle, same spot: it never leaves this component's own local
+// overlay. No Modal, no separate window — just transform + opacity growing
+// out of the button's own corner, and shrinking back into it.
 export function ThemeToggle() {
   const { mode, colors, setMode } = useTheme();
   const reducedMotion = useReducedMotion();
-  const triggerRef = useRef<View>(null);
   const [open, setOpen] = useState(false);
-  const [anchorTop, setAnchorTop] = useState(0);
   const progress = useRef(new Animated.Value(0)).current;
 
   const animateTo = (toValue: number, onDone?: () => void) => {
@@ -37,44 +39,38 @@ export function ThemeToggle() {
       return;
     }
     if (toValue === 1) {
-      Animated.spring(progress, { toValue, useNativeDriver: true, friction: 7, tension: 90 }).start();
+      Animated.spring(progress, { toValue, useNativeDriver: true, friction: 8, tension: 90 }).start();
     } else {
       Animated.timing(progress, { toValue, duration: tokens.motion.duration.medium, easing: Easing.in(Easing.cubic), useNativeDriver: true }).start(onDone);
     }
   };
 
-  const openMenu = () => {
-    triggerRef.current?.measureInWindow((_x, y, _width, height) => {
-      setAnchorTop(y + height + tokens.space.xs);
-      setOpen(true);
-      animateTo(1);
-    });
+  const toggle = () => (open ? animateTo(0, () => setOpen(false)) : (setOpen(true), animateTo(1)));
+
+  const selectOption = (nextMode: ThemeMode, event: GestureResponderEvent) => {
+    event.stopPropagation();
+    setMode(nextMode);
+    animateTo(0, () => setOpen(false));
   };
 
-  const closeMenu = () => animateTo(0, () => setOpen(false));
-
-  const scale = progress.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] });
+  const scale = progress.interpolate({ inputRange: [0, 1], outputRange: [0.25, 1] });
 
   return (
-    <View>
+    <View style={styles.anchor}>
       <Pressable
-        ref={triggerRef}
         accessibilityRole="button"
-        accessibilityLabel={`Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`}
-        onPress={() => (open ? closeMenu() : openMenu())}
+        accessibilityLabel={open ? 'Cerrar selector de tema' : `Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`}
+        onPress={toggle}
         style={[styles.trigger, { backgroundColor: colors.muted }]}
       >
         <Ionicons name={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
       </Pressable>
 
-      <Modal transparent visible={open} animationType="none" onRequestClose={closeMenu}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={closeMenu} />
+      {open && (
         <Animated.View
           style={[
-            styles.menu,
+            styles.panel,
             {
-              top: anchorTop,
-              right: tokens.screenMargin,
               backgroundColor: colors.surface,
               borderColor: colors.border,
               opacity: progress,
@@ -90,7 +86,7 @@ export function ThemeToggle() {
                 key={option.mode}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
-                onPress={() => { setMode(option.mode); closeMenu(); }}
+                onPress={(event) => selectOption(option.mode, event)}
                 style={styles.row}
               >
                 <Ionicons name={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
@@ -103,14 +99,15 @@ export function ThemeToggle() {
             );
           })}
         </Animated.View>
-      </Modal>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  trigger: { width: tokens.height.minTouch, height: tokens.height.minTouch, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
-  menu: { position: 'absolute', width: 224, borderRadius: tokens.radius.md, borderWidth: 1, paddingVertical: tokens.space.xs, boxShadow: tokens.shadow.panel },
+  anchor: { width: CLOSED_SIZE, height: CLOSED_SIZE },
+  trigger: { width: CLOSED_SIZE, height: CLOSED_SIZE, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
+  panel: { position: 'absolute', top: CLOSED_SIZE + tokens.space.xs, right: 0, width: PANEL_WIDTH, borderRadius: 22, borderWidth: 1, paddingVertical: tokens.space.xs, boxShadow: tokens.shadow.panel, zIndex: 50, elevation: 8 },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
   rowCopy: { flex: 1 },
   selectedDot: { width: 6, height: 6, borderRadius: tokens.radius.pill },

@@ -37,7 +37,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
   const statusOpacity = useTextTransition(playbackText);
 
   return (
-    <Screen bottomInset={tokens.height.listItem + tokens.space.xl}>
+    <Screen bottomInset={tokens.height.navigationDock + tokens.space.md}>
       <View style={styles.header}>
         <View style={styles.brandLockup}>
           <AppText variant="headline">{brand.wordmark}</AppText>

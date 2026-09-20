@@ -94,6 +94,7 @@ export const tokens = {
     buttonSecondary: 44,
     chip: 32,
     listItem: 56,
+    navigationDock: 76,
     searchField: 48,
     minTouch: 44,
   },

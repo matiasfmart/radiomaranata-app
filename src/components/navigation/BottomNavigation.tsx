@@ -27,7 +27,7 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
   const { width } = useWindowDimensions();
   const activeIndex = bottomNavigationItems.findIndex((tab) => tab.id === activeTab);
   const bubblePosition = useRef(new Animated.Value(activeIndex)).current;
-  const itemWidth = (width - tokens.screenMargin * 2 - tokens.space.xs * 2) / bottomNavigationItems.length;
+  const itemWidth = (width - tokens.screenMargin * 2 - tokens.space.sm * 2) / bottomNavigationItems.length;
 
   useEffect(() => {
     if (reducedMotion) {
@@ -75,16 +75,16 @@ function NavItem({ tab, active, isPlaying, onPress }: NavItemProps) {
         <Ionicons name={tab.icon} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      <AppText variant="caption" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
+      <AppText variant="label" tone={active ? 'accent' : 'subtle'}>{tab.label}</AppText>
     </BubblePressable>
   );
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', left: tokens.screenMargin, right: tokens.screenMargin, bottom: tokens.space.md, minHeight: tokens.height.buttonPrimary - 12, flexDirection: 'row', alignItems: 'center', borderRadius: tokens.radius.pill, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: tokens.space.xs, paddingVertical: tokens.space.xs },
-  activeBubble: { position: 'absolute', top: tokens.space.xs, bottom: tokens.space.xs, left: tokens.space.xs, borderRadius: tokens.radius.pill },
+  navDock: { position: 'absolute', left: tokens.screenMargin, right: tokens.screenMargin, bottom: tokens.space.md, height: tokens.height.navigationDock, flexDirection: 'row', alignItems: 'center', borderRadius: tokens.radius.pill, borderWidth: 1, boxShadow: tokens.shadow.floating, paddingHorizontal: tokens.space.sm, paddingVertical: tokens.space.sm },
+  activeBubble: { position: 'absolute', top: tokens.space.sm, bottom: tokens.space.sm, left: tokens.space.sm, borderRadius: tokens.radius.pill },
   navItem: { flex: 1, zIndex: 1 },
-  navTap: { minHeight: tokens.height.minTouch, alignItems: 'center', justifyContent: 'center', gap: tokens.space.xs, borderRadius: tokens.radius.pill },
+  navTap: { height: tokens.height.navigationDock - tokens.space.sm * 2, alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm, paddingHorizontal: tokens.space.sm, borderRadius: tokens.radius.pill },
   navIconWrap: { width: tokens.icon.lg, height: tokens.icon.lg, alignItems: 'center', justifyContent: 'center' },
   navPlayingDot: { position: 'absolute', top: 0, right: 0, width: 5, height: 5, borderRadius: tokens.radius.pill },
 });

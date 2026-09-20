@@ -1,3 +1,20 @@
+export interface ThemeColors {
+  background: string;
+  foreground: string;
+  muted: string;
+  mutedForeground: string;
+  border: string;
+  surface: string;
+  surfacePressed: string;
+  foregroundSubtle: string;
+  invertedBackground: string;
+  invertedForeground: string;
+  accent: string;
+  accentForeground: string;
+  accentMuted: string;
+  transparent: string;
+}
+
 export const tokens = {
   color: {
     gray: {
@@ -12,6 +29,8 @@ export const tokens = {
       8: '#1F1F1F',
       9: '#0A0A0A',
     },
+    // Two full palettes, symmetric inversion. Accent keeps the same hue in
+    // both, but light mode uses a darker step to hold AA contrast on #FAFAFA.
     light: {
       background: '#FAFAFA',
       foreground: '#0A0A0A',
@@ -19,7 +38,15 @@ export const tokens = {
       mutedForeground: '#555555',
       border: '#DADADA',
       surface: '#F5F5F5',
-    },
+      surfacePressed: '#E3E3E3',
+      foregroundSubtle: '#767676',
+      invertedBackground: '#0A0A0A',
+      invertedForeground: '#FAFAFA',
+      accent: '#C33D32',
+      accentForeground: '#FAFAFA',
+      accentMuted: 'rgba(195,61,50,0.12)',
+      transparent: 'transparent',
+    } satisfies ThemeColors,
     dark: {
       background: '#0A0A0A',
       foreground: '#FAFAFA',
@@ -27,34 +54,15 @@ export const tokens = {
       mutedForeground: '#BDBDBD',
       border: '#363636',
       surface: '#0F0F0F',
-    },
-    background: '#0A0A0A',
-    foreground: '#FAFAFA',
-    muted: '#1F1F1F',
-    mutedForeground: '#BDBDBD',
-    border: '#363636',
-    surface: '#0F0F0F',
-    surfacePressed: '#1F1F1F',
-    foregroundSubtle: '#767676',
-    invertedBackground: '#FAFAFA',
-    invertedForeground: '#0A0A0A',
-    transparent: 'transparent',
-    // Single accent hue in the whole app. Warm red, used only where color
-    // itself is the information (live/playing state, primary action).
-    accent: '#E5483B',
-    accentForeground: '#0A0A0A',
-    accentMuted: 'rgba(229,72,59,0.14)',
-    cssVariables: {
-      '--background': '#0A0A0A',
-      '--foreground': '#FAFAFA',
-      '--muted': '#1F1F1F',
-      '--muted-foreground': '#BDBDBD',
-      '--border': '#363636',
-      '--surface': '#0F0F0F',
-      '--accent': '#E5483B',
-      '--accent-foreground': '#0A0A0A',
-      '--accent-muted': 'rgba(229,72,59,0.14)',
-    },
+      surfacePressed: '#1F1F1F',
+      foregroundSubtle: '#767676',
+      invertedBackground: '#FAFAFA',
+      invertedForeground: '#0A0A0A',
+      accent: '#E5483B',
+      accentForeground: '#0A0A0A',
+      accentMuted: 'rgba(229,72,59,0.14)',
+      transparent: 'transparent',
+    } satisfies ThemeColors,
   },
   // Closed 4px-base spacing scale. Nothing outside this set.
   space: {
@@ -110,3 +118,4 @@ export const tokens = {
     staggerStep: 40,
   },
 } as const;
+

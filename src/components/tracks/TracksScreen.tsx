@@ -5,6 +5,7 @@ import { brand } from '../../constants/brand';
 import { copy } from '../../constants/copy';
 import { playbackConfig } from '../../constants/playback';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
@@ -21,18 +22,19 @@ type TracksScreenProps = {
 };
 
 export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }: TracksScreenProps) {
+  const { colors } = useTheme();
   const songs = history.length ? history.slice(0, playbackConfig.trackHistoryLimit) : [{ title: copy.tracks.emptyTitle, artist: brand.fallbackArtist, time: playbackConfig.defaultPlayedAtLabel }];
 
   return (
     <Screen scroll>
       <ScreenHeader eyebrow={copy.tracks.eyebrow} title={copy.tracks.title} lead={copy.tracks.lead} />
 
-      <View style={styles.signalPanel}>
+      <View style={[styles.signalPanel, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <LiveIndicator active={isPlaying} label={isPlaying ? copy.tracks.currentPlaying : copy.tracks.currentAvailable} />
         <AppText variant="title" numberOfLines={2} style={styles.signalTitle}>{currentTrack.title}</AppText>
         <AppText variant="body" tone="muted" numberOfLines={1} style={styles.signalArtist}>{currentTrack.artist}</AppText>
         <View style={styles.action}>
-          <PillButton label={copy.tracks.openRadio} icon={<Ionicons name="radio-outline" size={tokens.icon.sm} color={tokens.color.accentForeground} />} onPress={onGoToListen} />
+          <PillButton label={copy.tracks.openRadio} icon={<Ionicons name="radio-outline" size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
         </View>
       </View>
 
@@ -40,7 +42,7 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
         <AppText variant="headline">{copy.tracks.recentTitle}</AppText>
         <AppText variant="caption" tone="subtle">{copy.tracks.historyMode}</AppText>
       </View>
-      <View style={styles.trackList}>
+      <View style={[styles.trackList, { backgroundColor: colors.muted, borderColor: colors.border }]}>
         {songs.map((song, index) => (
           <StaggeredRow key={`${song.title}-${index}`} index={index}>
             <ListItem index={String(index + 1).padStart(2, '0')} title={song.title} subtitle={song.artist} trailing={song.time} />
@@ -72,10 +74,10 @@ function StaggeredRow({ index, children }: { index: number; children: React.Reac
 }
 
 const styles = StyleSheet.create({
-  signalPanel: { borderRadius: tokens.radius.md, backgroundColor: tokens.color.surface, borderColor: tokens.color.border, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xl, marginBottom: tokens.space.xxl, boxShadow: tokens.shadow.panel },
+  signalPanel: { borderRadius: tokens.radius.md, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xl, marginBottom: tokens.space.xxl, boxShadow: tokens.shadow.panel },
   signalTitle: { marginTop: tokens.space.lg },
   signalArtist: { marginTop: tokens.space.xs },
   action: { marginTop: tokens.space.lg },
   historyHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: tokens.space.sm },
-  trackList: { borderRadius: tokens.radius.sm, backgroundColor: tokens.color.muted, overflow: 'hidden', borderColor: tokens.color.border, borderWidth: 1 },
+  trackList: { borderRadius: tokens.radius.sm, overflow: 'hidden', borderWidth: 1 },
 });

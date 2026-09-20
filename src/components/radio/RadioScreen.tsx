@@ -2,12 +2,14 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { brand } from '../../constants/brand';
 import { copy } from '../../constants/copy';
 import { useTextTransition } from '../../hooks/useTextTransition';
+import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { PlaybackStatus, Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
 import { Chip } from '../ui/Chip';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { Screen } from '../ui/Screen';
+import { ThemeToggle } from '../ui/ThemeToggle';
 import { TransportButton } from '../ui/TransportButton';
 
 type RadioScreenProps = {
@@ -25,6 +27,7 @@ type RadioScreenProps = {
 };
 
 export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, playbackStatus, playbackError, listenerCount, listenerCountries, streamReady, onToggle, onRetry }: RadioScreenProps) {
+  const { colors } = useTheme();
   const buttonLabel = isLoading ? 'Conectando' : isPlaying ? 'Pausar radio' : playbackStatus === 'error' ? 'Reintentar radio' : 'Reproducir radio';
   const listenerText = listenerCount > 1 ? `${listenerCount.toLocaleString('es-AR')}${listenerCountries > 0 ? ` · ${listenerCountries} países` : ''}` : copy.listeners.fallback;
   const playbackText = playbackError || (isPlaying ? copy.playback.playing : streamReady ? copy.playback.readyToListen : copy.playback.connectingSignal);
@@ -40,7 +43,10 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
           <AppText variant="headline">{brand.wordmark}</AppText>
           <AppText variant="caption" tone="subtle" style={styles.frequencyLabel}>{brand.frequency}</AppText>
         </View>
-        <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
+        <View style={styles.headerActions}>
+          <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
+          <ThemeToggle />
+        </View>
       </View>
 
       <View style={styles.body}>
@@ -48,7 +54,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
           <AppText variant="label" tone="subtle">{playbackText}</AppText>
         </Animated.View>
 
-        <View style={styles.frequencyRow}>
+        <View style={[styles.frequencyRow, { borderTopColor: colors.border, borderBottomColor: colors.border }]}>
           <AppText variant="display" style={styles.frequency}>{brand.frequencyShort}</AppText>
           <TransportButton
             playing={isPlaying}
@@ -78,8 +84,9 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   brandLockup: { flex: 1 },
   frequencyLabel: { marginTop: tokens.space.xs },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.base },
   body: { flex: 1, justifyContent: 'center' },
-  frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, borderTopColor: tokens.color.border, borderTopWidth: 1, borderBottomColor: tokens.color.border, borderBottomWidth: 1, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
+  frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
   frequency: { flexShrink: 1 },
   track: { marginTop: tokens.space.xl },
   artist: { marginTop: tokens.space.xs },

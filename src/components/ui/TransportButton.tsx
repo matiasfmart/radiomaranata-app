@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Animated, Pressable, StyleSheet } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 
 type TransportButtonProps = {
@@ -15,6 +16,7 @@ type TransportButtonProps = {
 // The single most important control in the app. Icon morphs via crossfade +
 // scale instead of swapping instantly, and pulses a halo while playing.
 export function TransportButton({ playing, loading, disabled, accessibilityLabel, onPress }: TransportButtonProps) {
+  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
   const pressScale = useRef(new Animated.Value(1)).current;
   const haloPulse = useRef(new Animated.Value(0)).current;
@@ -48,7 +50,7 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
 
   return (
     <Animated.View style={styles.area}>
-      <Animated.View style={[styles.halo, { opacity: playing ? haloOpacity : 0, transform: [{ scale: haloScale }] }]} />
+      <Animated.View style={[styles.halo, { backgroundColor: colors.accent, opacity: playing ? haloOpacity : 0, transform: [{ scale: haloScale }] }]} />
       <Animated.View style={{ transform: [{ scale: pressScale }] }}>
         <Pressable
           accessibilityLabel={accessibilityLabel}
@@ -57,17 +59,17 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
           onPress={onPress}
           onPressIn={() => Animated.spring(pressScale, { toValue: tokens.motion.pressScale, useNativeDriver: true }).start()}
           onPressOut={() => Animated.spring(pressScale, { toValue: 1, useNativeDriver: true }).start()}
-          style={[styles.button, disabled && styles.buttonDisabled]}
+          style={[styles.button, { backgroundColor: colors.accent }, disabled && styles.buttonDisabled]}
         >
           {loading ? (
-            <ActivityIndicator color={tokens.color.accentForeground} />
+            <ActivityIndicator color={colors.accentForeground} />
           ) : (
             <>
               <Animated.View style={[styles.iconLayer, { opacity: playOpacity, transform: [{ scale: playScale }] }]}>
-                <Ionicons name="play" size={tokens.icon.lg} color={tokens.color.accentForeground} />
+                <Ionicons name="play" size={tokens.icon.lg} color={colors.accentForeground} />
               </Animated.View>
               <Animated.View style={[styles.iconLayer, { opacity: pauseOpacity, transform: [{ scale: pauseScale }] }]}>
-                <Ionicons name="pause" size={tokens.icon.lg} color={tokens.color.accentForeground} />
+                <Ionicons name="pause" size={tokens.icon.lg} color={colors.accentForeground} />
               </Animated.View>
             </>
           )}
@@ -79,8 +81,8 @@ export function TransportButton({ playing, loading, disabled, accessibilityLabel
 
 const styles = StyleSheet.create({
   area: { width: tokens.height.buttonPrimary + 20, height: tokens.height.buttonPrimary + 20, alignItems: 'center', justifyContent: 'center' },
-  halo: { position: 'absolute', width: tokens.height.buttonPrimary + 20, height: tokens.height.buttonPrimary + 20, borderRadius: tokens.radius.pill, backgroundColor: tokens.color.accent },
-  button: { width: tokens.height.buttonPrimary, height: tokens.height.buttonPrimary, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.accent, boxShadow: tokens.shadow.floating },
+  halo: { position: 'absolute', width: tokens.height.buttonPrimary + 20, height: tokens.height.buttonPrimary + 20, borderRadius: tokens.radius.pill },
+  button: { width: tokens.height.buttonPrimary, height: tokens.height.buttonPrimary, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', boxShadow: tokens.shadow.floating },
   buttonDisabled: { opacity: 0.46 },
   iconLayer: { position: 'absolute', alignItems: 'center', justifyContent: 'center' },
 });

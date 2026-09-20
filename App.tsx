@@ -11,11 +11,18 @@ import { useListenerHeartbeat } from './src/hooks/useListenerHeartbeat';
 import { useNowPlaying } from './src/hooks/useNowPlaying';
 import { useRadioPlayer } from './src/hooks/useRadioPlayer';
 import { useScreenTransition } from './src/hooks/useScreenTransition';
-import { tokens } from './src/theme/tokens';
-
-const colors = tokens.color;
+import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 
 export default function App() {
+  return (
+    <ThemeProvider>
+      <AppShell />
+    </ThemeProvider>
+  );
+}
+
+function AppShell() {
+  const { colors, scheme } = useTheme();
   const fontsLoaded = useAppFonts();
   const [activeTab, setActiveTab] = useState<AppTab>('listen');
   const { currentTrack, history, isOnline, listenerCount, streamUrl } = useNowPlaying();
@@ -24,12 +31,12 @@ export default function App() {
   const { screenTransition, transitionX } = useScreenTransition(activeTab);
 
   if (!fontsLoaded) {
-    return <View style={styles.loadingScreen}><ActivityIndicator color={colors.foreground} /></View>;
+    return <View style={[styles.loadingScreen, { backgroundColor: colors.background }]}><ActivityIndicator color={colors.foreground} /></View>;
   }
 
   return (
-    <View style={styles.root}>
-      <StatusBar style="light" />
+    <View style={[styles.root, { backgroundColor: colors.background }]}>
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <SafeAreaView style={styles.safeArea}>
         <Animated.View style={[styles.screen, { opacity: screenTransition, transform: [{ translateX: transitionX }] }]}>
           {activeTab === 'listen' && <RadioScreen currentTrack={currentTrack} isLoading={isLoading} isOnline={isOnline} isPlaying={isPlaying} playbackStatus={playbackStatus} playbackError={playbackError} listenerCount={listenerSnapshot.available ? listenerSnapshot.listeners : listenerCount} listenerCountries={listenerSnapshot.available ? listenerSnapshot.countries : 0} streamReady={Boolean(streamUrl)} onToggle={togglePlayback} onRetry={retryPlayback} />}
@@ -43,8 +50,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
+  root: { flex: 1 },
   safeArea: { flex: 1 },
   screen: { flex: 1 },
-  loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
+  loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 });
+

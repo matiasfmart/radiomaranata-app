@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { AppText } from './AppText';
 
@@ -15,6 +16,7 @@ type LiveIndicatorProps = {
 // The one shared "is this on air" signal. Used identically in the Radio
 // header and the Tracks status panel instead of two bespoke dot+label pairs.
 export function LiveIndicator({ active, label, colorize = true }: LiveIndicatorProps) {
+  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
   const pulse = useRef(new Animated.Value(0)).current;
 
@@ -34,7 +36,7 @@ export function LiveIndicator({ active, label, colorize = true }: LiveIndicatorP
 
   return (
     <View style={styles.row}>
-      <Animated.View style={[styles.dot, isAccented && styles.dotActive, active && { opacity }]} />
+      <Animated.View style={[styles.dot, { backgroundColor: isAccented ? colors.accent : colors.foregroundSubtle }, active && { opacity }]} />
       <AppText variant="label" tone={isAccented ? 'accent' : 'muted'}>{label}</AppText>
     </View>
   );
@@ -42,6 +44,5 @@ export function LiveIndicator({ active, label, colorize = true }: LiveIndicatorP
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm },
-  dot: { width: 8, height: 8, borderRadius: tokens.radius.pill, backgroundColor: tokens.color.foregroundSubtle },
-  dotActive: { backgroundColor: tokens.color.accent },
+  dot: { width: 8, height: 8, borderRadius: tokens.radius.pill },
 });

@@ -9,6 +9,7 @@ import { AppText } from '../ui/AppText';
 import { Chip } from '../ui/Chip';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { Screen } from '../ui/Screen';
+import { SignalVisualizer } from '../ui/SignalVisualizer';
 import { TransportButton } from '../ui/TransportButton';
 
 type RadioScreenProps = {
@@ -58,6 +59,8 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
           <AppText variant="body" tone="muted" numberOfLines={1} style={styles.artist}>{hasTrackMetadata ? currentTrack.artist : copy.playback.liveArtist}</AppText>
         </Animated.View>
 
+        <SignalVisualizer active={isPlaying} />
+
         <View style={styles.transportRow}>
           <View>
             <AppText variant="caption" tone="subtle">{brand.frequency}</AppText>
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
   listeningModule: { flex: 1, justifyContent: 'center', paddingBottom: tokens.space.xxl },
   track: { marginTop: tokens.space.md },
   artist: { marginTop: tokens.space.xs },
-  transportRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, marginTop: tokens.space.lg },
+  transportRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, marginTop: tokens.space.md },
   frequency: { marginTop: tokens.space.xs },
   footer: { alignItems: 'flex-start', paddingBottom: tokens.space.base },
 });

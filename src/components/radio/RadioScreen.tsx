@@ -74,10 +74,10 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
             onPress={playbackStatus === 'error' ? onRetry : onToggle}
           />
         </View>
-      </View>
 
-      <View style={styles.footer}>
-        <Chip label={`${copy.listeners.label} · ${listenerText}`} tone={isPlaying ? 'accent' : 'neutral'} />
+        <View style={styles.audience}>
+          <Chip label={`${copy.listeners.label} · ${listenerText}`} tone={isPlaying ? 'accent' : 'neutral'} />
+        </View>
       </View>
     </Screen>
   );
@@ -92,5 +92,5 @@ const styles = StyleSheet.create({
   artist: { marginTop: tokens.space.xs },
   transportRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, marginTop: tokens.space.md },
   frequency: { marginTop: tokens.space.xs },
-  footer: { alignItems: 'flex-start', paddingBottom: tokens.space.base },
+  audience: { alignSelf: 'flex-start', marginTop: tokens.space.lg },
 });

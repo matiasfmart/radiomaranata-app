@@ -14,9 +14,8 @@ type ListItemProps = {
 // One row shape for every list in the app. Fixed height token, same
 // left/right edges as everything else on screen.
 export function ListItem({ index, title, subtitle, trailing }: ListItemProps) {
-  const { colors } = useTheme();
   return (
-    <View style={[styles.row, { borderBottomColor: colors.border }]}>
+    <View style={styles.row}>
       <AppText variant="caption" tone="subtle" style={styles.index}>{index}</AppText>
       <View style={styles.copy}>
         <AppText variant="label" numberOfLines={1} style={styles.title}>{title}</AppText>
@@ -45,7 +44,7 @@ export function PillButton({ label, icon, onPress }: PillButtonProps) {
 }
 
 const styles = StyleSheet.create({
-  row: { minHeight: tokens.height.listItem, flexDirection: 'row', alignItems: 'center', paddingHorizontal: tokens.space.base, borderBottomWidth: 1 },
+  row: { minHeight: tokens.height.listItem, flexDirection: 'row', alignItems: 'center', paddingHorizontal: tokens.space.base },
   index: { width: 32 },
   copy: { flex: 1, paddingRight: tokens.space.base },
   title: { marginBottom: 2 },

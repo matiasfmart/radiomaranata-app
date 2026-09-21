@@ -3,7 +3,6 @@ export interface ThemeColors {
   foreground: string;
   muted: string;
   mutedForeground: string;
-  border: string;
   surface: string;
   surfacePressed: string;
   foregroundSubtle: string;
@@ -37,7 +36,6 @@ export const tokens = {
       foreground: '#151513',
       muted: '#DDDAD4',
       mutedForeground: '#6B6862',
-      border: '#C8C4BC',
       surface: '#F8F7F4',
       surfacePressed: '#E8E4DE',
       foregroundSubtle: '#89847C',
@@ -53,7 +51,6 @@ export const tokens = {
       foreground: '#F4F2ED',
       muted: '#2C2A27',
       mutedForeground: '#BBB6AD',
-      border: '#45413B',
       surface: '#22211F',
       surfacePressed: '#302D29',
       foregroundSubtle: '#948F87',
@@ -101,8 +98,8 @@ export const tokens = {
   // Single lateral margin token used by every screen.
   screenMargin: 24,
   shadow: {
-    floating: '0px 4px 10px rgba(49,42,36,0.07)',
-    panel: '0px 2px 8px rgba(49,42,36,0.05)',
+    floating: '0px 2px 6px rgba(49,42,36,0.035)',
+    panel: '0px 1px 4px rgba(49,42,36,0.025)',
   },
   motion: {
     duration: {

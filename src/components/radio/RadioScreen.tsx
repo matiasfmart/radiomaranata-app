@@ -52,7 +52,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
           <AppText variant="label" tone="subtle">{playbackText}</AppText>
         </Animated.View>
 
-        <View style={[styles.frequencyRow, { borderTopColor: colors.border, borderBottomColor: colors.border }]}>
+        <View style={styles.frequencyRow}>
           <AppText variant="display" style={styles.frequency}>{brand.frequencyShort}</AppText>
           <TransportButton
             playing={isPlaying}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   brandLockup: { flex: 1 },
   brandMeta: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.md, marginTop: tokens.space.xs },
   body: { flex: 1, justifyContent: 'center' },
-  frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
+  frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
   frequency: { flexShrink: 1 },
   track: { marginTop: tokens.space.xl },
   artist: { marginTop: tokens.space.xs },

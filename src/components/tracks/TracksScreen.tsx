@@ -29,7 +29,7 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
     <Screen scroll>
       <ScreenHeader eyebrow={copy.tracks.eyebrow} title={copy.tracks.title} lead={copy.tracks.lead} />
 
-      <View style={[styles.signalPanel, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={[styles.signalPanel, { backgroundColor: colors.surface }]}>
         <LiveIndicator active={isPlaying} label={isPlaying ? copy.tracks.currentPlaying : copy.tracks.currentAvailable} />
         <AppText variant="title" numberOfLines={2} style={styles.signalTitle}>{currentTrack.title}</AppText>
         <AppText variant="body" tone="muted" numberOfLines={1} style={styles.signalArtist}>{currentTrack.artist}</AppText>
@@ -42,7 +42,7 @@ export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }:
         <AppText variant="headline">{copy.tracks.recentTitle}</AppText>
         <AppText variant="caption" tone="subtle">{copy.tracks.historyMode}</AppText>
       </View>
-      <View style={[styles.trackList, { backgroundColor: colors.muted, borderColor: colors.border }]}>
+      <View style={[styles.trackList, { backgroundColor: colors.muted }]}>
         {songs.map((song, index) => (
           <StaggeredRow key={`${song.title}-${index}`} index={index}>
             <ListItem index={String(index + 1).padStart(2, '0')} title={song.title} subtitle={song.artist} trailing={song.time} />
@@ -74,10 +74,10 @@ function StaggeredRow({ index, children }: { index: number; children: React.Reac
 }
 
 const styles = StyleSheet.create({
-  signalPanel: { borderRadius: tokens.radius.md, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xl, marginBottom: tokens.space.xxl, boxShadow: tokens.shadow.panel },
+  signalPanel: { borderRadius: tokens.radius.md, padding: tokens.space.lg, marginTop: tokens.space.xl, marginBottom: tokens.space.xxl, boxShadow: tokens.shadow.panel },
   signalTitle: { marginTop: tokens.space.lg },
   signalArtist: { marginTop: tokens.space.xs },
   action: { marginTop: tokens.space.lg },
   historyHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: tokens.space.sm },
-  trackList: { borderRadius: tokens.radius.md, overflow: 'hidden', borderWidth: 1 },
+  trackList: { borderRadius: tokens.radius.md, overflow: 'hidden' },
 });

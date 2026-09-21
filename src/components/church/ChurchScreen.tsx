@@ -16,11 +16,11 @@ export function ChurchScreen() {
     <Screen scroll>
       <ScreenHeader eyebrow={copy.church.eyebrow} title={copy.church.title} lead={copy.church.lead} />
 
-      <View style={[styles.infoSurface, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={[styles.infoSurface, { backgroundColor: colors.surface }]}>
         <AppIcon icon={Heart} size={tokens.icon.lg} color={colors.foreground} />
         <AppText variant="headline" style={styles.infoTitle}>{copy.church.name}</AppText>
         <AppText variant="body" tone="muted" style={styles.infoText}>{copy.church.description}</AppText>
-        <BubblePressable accessibilityRole="link" bubbleColor={colors.foregroundSubtle} onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={[styles.websiteButton, { borderTopColor: colors.border }]}>
+        <BubblePressable accessibilityRole="link" bubbleColor={colors.foregroundSubtle} onPress={() => Linking.openURL(appConfig.church.websiteUrl)} style={styles.websiteButton}>
           <AppText variant="label">{copy.church.websiteAction}</AppText>
           <AppIcon icon={ExternalLink} size={tokens.icon.sm} color={colors.foreground} />
         </BubblePressable>
@@ -30,9 +30,9 @@ export function ChurchScreen() {
 }
 
 const styles = StyleSheet.create({
-  infoSurface: { borderRadius: tokens.radius.md, borderWidth: 1, padding: tokens.space.lg, marginTop: tokens.space.xxl },
+  infoSurface: { borderRadius: tokens.radius.md, padding: tokens.space.lg, marginTop: tokens.space.xxl, boxShadow: tokens.shadow.panel },
   infoTitle: { marginTop: tokens.space.base },
   infoText: { marginTop: tokens.space.sm },
-  websiteButton: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: tokens.space.lg, paddingTop: tokens.space.lg, borderTopWidth: 1, minHeight: tokens.height.minTouch },
+  websiteButton: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: tokens.space.lg, paddingTop: tokens.space.lg, minHeight: tokens.height.minTouch },
 });
 

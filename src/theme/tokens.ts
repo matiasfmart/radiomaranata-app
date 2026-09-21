@@ -76,7 +76,7 @@ export const tokens = {
   // Exactly 3 radii: small, medium, pill.
   radius: {
     sm: 16,
-    md: 24,
+    md: 30,
     pill: 999,
   },
   // Exactly 3 icon sizes, one stroke weight (outline icon set) throughout.

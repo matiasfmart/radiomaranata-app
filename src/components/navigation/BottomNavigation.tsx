@@ -10,7 +10,7 @@ import { AppText } from '../ui/AppText';
 import { BubblePressable } from '../ui/BubblePressable';
 import { VintageRadioIcon } from '../ui/VintageRadioIcon';
 
-const ACTIVE_BUBBLE_SIZE = 48;
+const ACTIVE_BUBBLE_SIZE = 56;
 const NAV_ITEM_GAP = tokens.space.sm;
 const NAV_DOCK_PADDING = tokens.space.sm;
 const navIcons: Record<Exclude<BottomNavigationIcon, 'radio'>, LucideIcon> = { albums: Album, heart: Heart };
@@ -91,7 +91,7 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
     <Animated.View style={[styles.navDock, { width: dockWidth, backgroundColor: colors.surface, borderColor: colors.border, transform: [{ scale: dockPulse }] }]}>
       <Animated.View
         pointerEvents="none"
-        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accentMuted, transform: [{ scale: bubblePulse }] }]}
+        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.accent, transform: [{ scale: bubblePulse }] }]}
       />
       <View style={styles.navItems}>
         {bottomNavigationItems.map((tab) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemWidth={tab.id === activeTab ? targetBubbleWidth : ACTIVE_BUBBLE_SIZE} showActiveLabel={showActiveLabel} labelOpacity={labelOpacity} onPress={() => onTabChange(tab.id)} />)}
@@ -102,6 +102,7 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
 
 function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, labelOpacity, onPress }: NavItemProps) {
   const { colors } = useTheme();
+  const iconColor = active ? colors.accentForeground : colors.foregroundSubtle;
   return (
     <BubblePressable
       accessibilityLabel={tab.label}
@@ -115,11 +116,11 @@ function NavItem({ tab, active, isPlaying, itemWidth, showActiveLabel, labelOpac
     >
       <View style={styles.navIconWrap}>
         {tab.icon === 'radio'
-          ? <VintageRadioIcon size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />
-          : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={active ? colors.accent : colors.foregroundSubtle} />}
+          ? <VintageRadioIcon size={tokens.icon.md} color={iconColor} />
+          : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" tone="accent">{tab.label}</AppText></Animated.View>}
+      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" style={{ color: colors.accentForeground }}>{tab.label}</AppText></Animated.View>}
     </BubblePressable>
   );
 }

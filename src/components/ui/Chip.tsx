@@ -15,7 +15,7 @@ export function Chip({ label, tone = 'neutral' }: ChipProps) {
   return (
     <View style={[styles.chip, { backgroundColor: isAccent ? colors.accentMuted : colors.muted }]}>
       <View style={[styles.indicator, { backgroundColor: isAccent ? colors.accent : colors.foregroundSubtle }]} />
-      <AppText variant="label" tone={isAccent ? 'accent' : 'subtle'}>{label}</AppText>
+      <AppText variant="label" tone={isAccent ? 'foreground' : 'subtle'}>{label}</AppText>
     </View>
   );
 }

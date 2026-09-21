@@ -28,7 +28,7 @@ function AppShell() {
   const [activeTab, setActiveTab] = useState<AppTab>('listen');
   const { currentTrack, history, isOnline, listenerCount, streamUrl } = useNowPlaying();
   const { isLoading, isPlaying, playbackError, playbackStatus, retryPlayback, togglePlayback } = useRadioPlayer(streamUrl);
-  const listenerSnapshot = useListenerHeartbeat(isPlaying);
+  const listenerSnapshot = useListenerHeartbeat();
   const { screenTransition, transitionX } = useScreenTransition(activeTab);
 
   if (!fontsLoaded) {
@@ -42,7 +42,7 @@ function AppShell() {
         <Animated.View style={[styles.screen, { opacity: screenTransition, transform: [{ translateX: transitionX }] }]}>
           {activeTab === 'listen' && <RadioScreen currentTrack={currentTrack} isLoading={isLoading} isOnline={isOnline} isPlaying={isPlaying} playbackStatus={playbackStatus} playbackError={playbackError} listenerCount={listenerSnapshot.available ? listenerSnapshot.listeners : listenerCount} listenerCountries={listenerSnapshot.available ? listenerSnapshot.countries : 0} streamReady={Boolean(streamUrl)} onToggle={togglePlayback} onRetry={retryPlayback} />}
           {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} />}
-          {activeTab === 'church' && <ChurchScreen />}
+          {activeTab === 'church' && <ChurchScreen listenerSnapshot={listenerSnapshot} />}
         </Animated.View>
         <View style={styles.themeControl}>
           <ThemeToggle />

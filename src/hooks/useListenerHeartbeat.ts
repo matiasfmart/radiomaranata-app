@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { playbackConfig } from '../constants/playback';
-import { ListenerSnapshot, sendListenerHeartbeat } from '../services/listeners';
+import { getListenerSnapshot, ListenerSnapshot } from '../services/listeners';
 
 const emptyListeners: ListenerSnapshot = {
   listeners: 0,
@@ -9,18 +9,16 @@ const emptyListeners: ListenerSnapshot = {
   available: false,
 };
 
-export function useListenerHeartbeat(isPlaying: boolean): ListenerSnapshot {
+export function useListenerHeartbeat(): ListenerSnapshot {
   const [listenerSnapshot, setListenerSnapshot] = useState(emptyListeners);
 
   useEffect(() => {
-    if (!isPlaying) return;
-
-    const sendHeartbeat = async () => setListenerSnapshot(await sendListenerHeartbeat());
-    sendHeartbeat();
-    const interval = setInterval(sendHeartbeat, playbackConfig.listenerHeartbeatMs);
+    const loadListeners = async () => setListenerSnapshot(await getListenerSnapshot());
+    loadListeners();
+    const interval = setInterval(loadListeners, playbackConfig.listenerHeartbeatMs);
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, []);
 
   return listenerSnapshot;
 }

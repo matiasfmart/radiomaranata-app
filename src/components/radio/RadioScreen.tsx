@@ -31,6 +31,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
   const listenerText = listenerCount > 1 ? `${listenerCount.toLocaleString('es-AR')}${listenerCountries > 0 ? ` · ${listenerCountries} países` : ''}` : copy.listeners.fallback;
   const playbackText = playbackError || (isPlaying ? copy.playback.playing : streamReady ? copy.playback.readyToListen : copy.playback.connectingSignal);
   const hasTrackMetadata = currentTrack.title !== brand.name || currentTrack.artist !== copy.playback.loadingSignal;
+  const nowPlayingLabel = playbackStatus === 'error' ? playbackText : isPlaying ? copy.playback.now : playbackText;
 
   const trackOpacity = useTextTransition(`${currentTrack.title}-${currentTrack.artist}`);
   const statusOpacity = useTextTransition(playbackText);
@@ -47,13 +48,21 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
         </View>
       </View>
 
-      <View style={styles.body}>
+      <View style={styles.listeningModule}>
         <Animated.View style={{ opacity: statusOpacity }}>
-          <AppText variant="label" tone="subtle">{playbackText}</AppText>
+          <AppText variant="caption" tone="subtle">{nowPlayingLabel}</AppText>
         </Animated.View>
 
-        <View style={styles.frequencyRow}>
-          <AppText variant="display" style={styles.frequency}>{brand.frequencyShort}</AppText>
+        <Animated.View style={[styles.track, { opacity: trackOpacity }]}>
+          <AppText variant="title" numberOfLines={2}>{hasTrackMetadata ? currentTrack.title : brand.stationLabel}</AppText>
+          <AppText variant="body" tone="muted" numberOfLines={1} style={styles.artist}>{hasTrackMetadata ? currentTrack.artist : copy.playback.liveArtist}</AppText>
+        </Animated.View>
+
+        <View style={styles.transportRow}>
+          <View>
+            <AppText variant="caption" tone="subtle">{brand.frequency}</AppText>
+            <AppText variant="display" style={styles.frequency}>{brand.frequencyShort}</AppText>
+          </View>
           <TransportButton
             playing={isPlaying}
             loading={isLoading}
@@ -62,13 +71,6 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
             onPress={playbackStatus === 'error' ? onRetry : onToggle}
           />
         </View>
-
-        {hasTrackMetadata && (
-          <Animated.View style={[styles.track, { opacity: trackOpacity }]}>
-            <AppText variant="title" numberOfLines={2}>{currentTrack.title}</AppText>
-            <AppText variant="body" tone="muted" numberOfLines={1} style={styles.artist}>{currentTrack.artist}</AppText>
-          </Animated.View>
-        )}
       </View>
 
       <View style={styles.footer}>
@@ -82,10 +84,10 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 },
   brandLockup: { flex: 1 },
   brandMeta: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.md, marginTop: tokens.space.xs },
-  body: { flex: 1, justifyContent: 'center' },
-  frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
-  frequency: { flexShrink: 1 },
-  track: { marginTop: tokens.space.xl },
+  listeningModule: { flex: 1, justifyContent: 'center', paddingBottom: tokens.space.xxl },
+  track: { marginTop: tokens.space.md },
   artist: { marginTop: tokens.space.xs },
-  footer: { alignItems: 'center', paddingBottom: tokens.space.base },
+  transportRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, marginTop: tokens.space.lg },
+  frequency: { marginTop: tokens.space.xs },
+  footer: { alignItems: 'flex-start', paddingBottom: tokens.space.base },
 });

@@ -1,4 +1,4 @@
-import { Clock, ExternalLink, Heart, MapPin, MessageCircle, Phone, Radio, Users } from 'lucide-react-native';
+import { Camera, CirclePlay, Clock, ExternalLink, Heart, MapPin, MessageCircle, Music2, Phone, Radio, type LucideIcon, ThumbsUp, Users } from 'lucide-react-native';
 import { Linking, StyleSheet, View } from 'react-native';
 import { appConfig } from '../../config/app';
 import { copy } from '../../constants/copy';
@@ -13,6 +13,14 @@ import { ScreenHeader } from '../ui/ScreenHeader';
 
 type ChurchScreenProps = {
   listenerSnapshot: ListenerSnapshot;
+};
+
+const socialIcons: Record<string, LucideIcon> = {
+  Instagram: Camera,
+  YouTube: CirclePlay,
+  Facebook: ThumbsUp,
+  TikTok: Music2,
+  'Canal de WhatsApp': MessageCircle,
 };
 
 type ActionRowProps = {
@@ -96,7 +104,7 @@ export function ChurchScreen({ listenerSnapshot }: ChurchScreenProps) {
 
       <View style={styles.section}>
         <AppText variant="headline">Canales oficiales</AppText>
-        {appConfig.church.social.map((channel) => <ActionRow key={channel.label} icon={ExternalLink} label={channel.label} url={channel.url} />)}
+        {appConfig.church.social.map((channel) => <ActionRow key={channel.label} icon={socialIcons[channel.label] ?? ExternalLink} label={channel.label} url={channel.url} />)}
       </View>
 
       <View style={styles.section}>

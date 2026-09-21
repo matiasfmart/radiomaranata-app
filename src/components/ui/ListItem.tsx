@@ -39,7 +39,7 @@ export function PillButton({ label, icon, onPress }: PillButtonProps) {
   return (
     <BubblePressable accessibilityRole="button" bubbleColor={colors.accent} containerStyle={styles.pillContainer} onPress={onPress} style={[styles.pill, { backgroundColor: colors.accent }]}>
       {icon}
-      <AppText variant="label" tone="inverted">{label}</AppText>
+      <AppText variant="label" style={{ color: colors.accentForeground }}>{label}</AppText>
     </BubblePressable>
   );
 }

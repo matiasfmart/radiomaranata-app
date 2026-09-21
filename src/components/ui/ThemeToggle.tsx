@@ -24,7 +24,7 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
 const CLOSED_HEIGHT = tokens.height.minTouch;
 const CLOSED_WIDTH = CLOSED_HEIGHT;
 const PANEL_WIDTH = 208;
-const PANEL_HEIGHT = CLOSED_HEIGHT * options.length + tokens.space.xs * 2;
+const PANEL_HEIGHT = CLOSED_HEIGHT * 2 + 64 + tokens.space.xs * 2;
 
 // One button, one shape: the panel is anchored on the exact same corner as
 // the trigger and starts scaled down to its footprint, so it reads as the
@@ -95,7 +95,7 @@ export function ThemeToggle() {
                     accessibilityRole="button"
                     accessibilityState={{ selected }}
                     onPress={(event) => selectOption(option.mode, event)}
-                    style={styles.row}
+                    style={[styles.row, option.caption && styles.rowWithCaption]}
                   >
                     <AppIcon icon={option.icon} size={tokens.icon.sm} color={selected ? colors.accent : colors.foregroundSubtle} />
                     <View style={styles.rowCopy}>
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   panel: { width: '100%', height: '100%', borderRadius: tokens.radius.md, borderWidth: 1, boxShadow: tokens.shadow.panel },
   options: { paddingVertical: tokens.space.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
+  rowWithCaption: { minHeight: 64 },
   rowCopy: { flex: 1 },
   selectedDot: { width: 6, height: 6, borderRadius: tokens.radius.pill },
 });

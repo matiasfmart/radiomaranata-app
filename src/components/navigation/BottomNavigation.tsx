@@ -151,11 +151,11 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.pill, borderWidth: 1, boxShadow: tokens.shadow.floating, overflow: 'hidden' },
+  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md, borderWidth: 1, boxShadow: tokens.shadow.floating, overflow: 'hidden' },
   navItems: { width: '100%', height: ACTIVE_BUBBLE_SIZE, zIndex: 1 },
-  activeBubble: { position: 'absolute', top: NAV_DOCK_PADDING, borderRadius: tokens.radius.pill },
+  activeBubble: { position: 'absolute', top: NAV_DOCK_PADDING, borderRadius: tokens.radius.md },
   navItem: { position: 'absolute', top: 0, zIndex: 1 },
-  navTap: { height: ACTIVE_BUBBLE_SIZE, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.pill },
+  navTap: { height: ACTIVE_BUBBLE_SIZE, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md },
   navTapActive: { flexDirection: 'row', gap: tokens.space.sm },
   navIconWrap: { width: tokens.icon.lg, height: tokens.icon.lg, alignItems: 'center', justifyContent: 'center' },
   navPlayingDot: { position: 'absolute', top: 0, right: 0, width: 5, height: 5, borderRadius: tokens.radius.pill },

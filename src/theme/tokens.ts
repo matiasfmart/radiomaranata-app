@@ -99,6 +99,7 @@ export const tokens = {
   screenMargin: 24,
   shadow: {
     floating: '0px 8px 18px rgba(49,42,36,0.07)',
+    navigation: '0px -6px 18px rgba(49,42,36,0.09)',
     panel: '0px 3px 10px rgba(49,42,36,0.045)',
   },
   motion: {

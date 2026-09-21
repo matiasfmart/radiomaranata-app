@@ -151,7 +151,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.floating, overflow: 'hidden' },
+  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.navigation, overflow: 'hidden' },
   navItems: { width: '100%', height: ACTIVE_BUBBLE_SIZE, zIndex: 1 },
   activeBubble: { position: 'absolute', top: NAV_DOCK_PADDING, borderRadius: tokens.radius.md },
   navItem: { position: 'absolute', top: 0, zIndex: 1 },

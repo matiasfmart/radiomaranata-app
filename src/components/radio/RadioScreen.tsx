@@ -9,7 +9,6 @@ import { AppText } from '../ui/AppText';
 import { Chip } from '../ui/Chip';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { Screen } from '../ui/Screen';
-import { ThemeToggle } from '../ui/ThemeToggle';
 import { TransportButton } from '../ui/TransportButton';
 
 type RadioScreenProps = {
@@ -41,11 +40,10 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
       <View style={styles.header}>
         <View style={styles.brandLockup}>
           <AppText variant="headline">{brand.wordmark}</AppText>
-          <AppText variant="caption" tone="subtle" style={styles.frequencyLabel}>{brand.frequency}</AppText>
-        </View>
-        <View style={styles.headerActions}>
-          <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
-          <ThemeToggle />
+          <View style={styles.brandMeta}>
+            <AppText variant="caption" tone="subtle">{brand.frequency}</AppText>
+            <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
+          </View>
         </View>
       </View>
 
@@ -83,8 +81,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 },
   brandLockup: { flex: 1 },
-  frequencyLabel: { marginTop: tokens.space.xs },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.base },
+  brandMeta: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.md, marginTop: tokens.space.xs },
   body: { flex: 1, justifyContent: 'center' },
   frequencyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.lg, borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: tokens.space.lg, marginTop: tokens.space.sm },
   frequency: { flexShrink: 1 },

@@ -5,6 +5,7 @@ import { ChurchScreen } from './src/components/church/ChurchScreen';
 import { BottomNavigation } from './src/components/navigation/BottomNavigation';
 import { RadioScreen } from './src/components/radio/RadioScreen';
 import { TracksScreen } from './src/components/tracks/TracksScreen';
+import { ThemeToggle } from './src/components/ui/ThemeToggle';
 import { AppTab } from './src/constants/navigation';
 import { useAppFonts } from './src/hooks/useAppFonts';
 import { useListenerHeartbeat } from './src/hooks/useListenerHeartbeat';
@@ -43,6 +44,9 @@ function AppShell() {
           {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} onGoToListen={() => setActiveTab('listen')} />}
           {activeTab === 'church' && <ChurchScreen />}
         </Animated.View>
+        <View style={styles.themeControl}>
+          <ThemeToggle />
+        </View>
         <BottomNavigation activeTab={activeTab} isPlaying={isPlaying} onTabChange={setActiveTab} />
       </SafeAreaView>
     </View>
@@ -53,6 +57,7 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   safeArea: { flex: 1 },
   screen: { flex: 1 },
+  themeControl: { position: 'absolute', top: 24, right: 24, zIndex: 20 },
   loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 });
 

@@ -12,8 +12,6 @@ export interface ThemeColors {
   accent: string;
   accentForeground: string;
   accentMuted: string;
-  navigationActive: string;
-  navigationActiveForeground: string;
   transparent: string;
 }
 
@@ -48,8 +46,6 @@ export const tokens = {
       accent: '#C94038',
       accentForeground: '#FFFFFF',
       accentMuted: '#EFC0BB',
-      navigationActive: '#151513',
-      navigationActiveForeground: '#FFFFFF',
       transparent: 'transparent',
     } satisfies ThemeColors,
     dark: {
@@ -66,8 +62,6 @@ export const tokens = {
       accent: '#D45148',
       accentForeground: '#FFFFFF',
       accentMuted: '#42201D',
-      navigationActive: '#0C0B0A',
-      navigationActiveForeground: '#FFFFFF',
       transparent: 'transparent',
     } satisfies ThemeColors,
   },

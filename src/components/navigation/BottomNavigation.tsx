@@ -101,7 +101,7 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
     <Animated.View style={[styles.navDock, { width: dockWidth, backgroundColor: colors.surface, borderColor: colors.border, transform: [{ scale: dockPulse }] }]}>
       <Animated.View
         pointerEvents="none"
-        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.navigationActive, transform: [{ scale: bubblePulse }] }]}
+        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.invertedBackground, transform: [{ scale: bubblePulse }] }]}
       />
       <View style={styles.navItems}>
         {bottomNavigationItems.map((tab, index) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemX={tabFrames[index].x} itemWidth={tabFrames[index].width} showActiveLabel={showActiveLabel} labelOpacity={labelOpacity} reducedMotion={reducedMotion} onPress={() => onTabChange(tab.id)} />)}
@@ -114,7 +114,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
   const { colors } = useTheme();
   const position = useRef(new Animated.Value(itemX)).current;
   const width = useRef(new Animated.Value(itemWidth)).current;
-  const iconColor = active ? colors.navigationActiveForeground : colors.foregroundSubtle;
+  const iconColor = active ? colors.invertedForeground : colors.foregroundSubtle;
 
   useEffect(() => {
     if (reducedMotion) {
@@ -134,7 +134,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
       accessibilityRole="tab"
       accessibilityState={{ selected: active }}
       aria-selected={active}
-      bubbleColor={active ? colors.navigationActive : colors.foregroundSubtle}
+      bubbleColor={active ? colors.invertedBackground : colors.foregroundSubtle}
       containerStyle={[styles.navItem, { left: position, width }]}
       onPress={onPress}
       style={[styles.navTap, active && showActiveLabel && styles.navTapActive]}
@@ -145,7 +145,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
           : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
         {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
       </View>
-      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" style={{ color: colors.navigationActiveForeground }}>{tab.label}</AppText></Animated.View>}
+      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" style={{ color: colors.invertedForeground }}>{tab.label}</AppText></Animated.View>}
     </BubblePressable>
   );
 }

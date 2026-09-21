@@ -24,7 +24,8 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
 const CLOSED_HEIGHT = tokens.height.minTouch;
 const CLOSED_WIDTH = CLOSED_HEIGHT;
 const PANEL_WIDTH = 208;
-const PANEL_HEIGHT = CLOSED_HEIGHT + CLOSED_HEIGHT * 2 + 64 + tokens.space.xs * 2;
+const PANEL_HEADER_HEIGHT = 36;
+const PANEL_HEIGHT = PANEL_HEADER_HEIGHT + CLOSED_HEIGHT * 2 + 64 + tokens.space.xs * 2;
 
 // One button, one shape: the panel is anchored on the exact same corner as
 // the trigger and starts scaled down to its footprint, so it reads as the
@@ -104,7 +105,7 @@ export function ThemeToggle() {
         </Pressable>
       </View>
 
-      <View style={[styles.trigger, { backgroundColor: colors.muted }]}>
+      <View style={[styles.trigger, { backgroundColor: colors.muted }, open && styles.triggerOpen]}>
         <Pressable accessibilityRole="button" accessibilityLabel={`${open ? 'Cerrar selector de tema' : `Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`}`} onPress={toggle} style={styles.triggerTap}>
           <AppIcon icon={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
         </Pressable>
@@ -116,11 +117,12 @@ export function ThemeToggle() {
 const styles = StyleSheet.create({
   anchor: { width: CLOSED_WIDTH, height: CLOSED_HEIGHT },
   trigger: { position: 'absolute', top: 0, right: 0, width: CLOSED_WIDTH, height: CLOSED_HEIGHT, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', zIndex: 2, elevation: 9 },
+  triggerOpen: { top: tokens.space.xs, right: tokens.space.xs, width: PANEL_HEADER_HEIGHT, height: PANEL_HEADER_HEIGHT, backgroundColor: 'transparent' },
   triggerTap: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
   panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 1, elevation: 8 },
   panelTap: { width: '100%', height: '100%' },
   panel: { width: '100%', height: '100%', borderRadius: tokens.radius.md, borderWidth: 1, boxShadow: tokens.shadow.panel },
-  options: { paddingTop: CLOSED_HEIGHT + tokens.space.xs, paddingBottom: tokens.space.xs },
+  options: { paddingTop: PANEL_HEADER_HEIGHT, paddingBottom: tokens.space.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
   rowWithCaption: { minHeight: 64 },
   rowCopy: { flex: 1 },

@@ -1,16 +1,16 @@
-import { Audio } from 'expo-av';
+import { AudioPlayer, createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 
-export type RadioSound = Audio.Sound;
+export type RadioSound = AudioPlayer;
 
 export async function configureRadioAudioMode(): Promise<void> {
-  await Audio.setAudioModeAsync({
-    staysActiveInBackground: true,
-    playsInSilentModeIOS: true,
-    shouldDuckAndroid: true,
+  await setAudioModeAsync({
+    playsInSilentMode: true,
+    shouldPlayInBackground: true,
   });
 }
 
 export async function createRadioSound(streamUrl: string): Promise<RadioSound> {
-  const { sound } = await Audio.Sound.createAsync({ uri: streamUrl }, { shouldPlay: true, isLooping: false });
-  return sound;
+  const player = createAudioPlayer(streamUrl);
+  player.play();
+  return player;
 }

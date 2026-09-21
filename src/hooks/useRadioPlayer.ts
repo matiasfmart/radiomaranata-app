@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { copy } from '../constants/copy';
 import { configureRadioAudioMode, createRadioSound, RadioSound } from '../services/radioAudio';
 import { PlaybackStatus } from '../types/radio';
@@ -8,12 +8,12 @@ export function useRadioPlayer(streamUrl: string | null) {
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [sound, setSound] = useState<RadioSound | null>(null);
+  const sound = useRef<RadioSound | null>(null);
 
   useEffect(() => {
-    configureRadioAudioMode();
-    return () => { sound?.unloadAsync(); };
-  }, [sound]);
+    void configureRadioAudioMode();
+    return () => { sound.current?.remove(); sound.current = null; };
+  }, []);
 
   const togglePlayback = async () => {
     if (!streamUrl || isLoading) return;
@@ -23,13 +23,13 @@ export function useRadioPlayer(streamUrl: string | null) {
     setPlaybackError(null);
 
     try {
-      if (sound) {
+      if (sound.current) {
         if (isPlaying) {
-          await sound.pauseAsync();
+          sound.current.pause();
           setIsPlaying(false);
           setPlaybackStatus('paused');
         } else {
-          await sound.playAsync();
+          sound.current.play();
           setIsPlaying(true);
           setPlaybackStatus('playing');
         }
@@ -37,7 +37,7 @@ export function useRadioPlayer(streamUrl: string | null) {
       }
 
       const loadedSound = await createRadioSound(streamUrl);
-      setSound(loadedSound);
+      sound.current = loadedSound;
       setIsPlaying(true);
       setPlaybackStatus('playing');
     } catch (error) {

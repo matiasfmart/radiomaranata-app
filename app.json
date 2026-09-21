@@ -9,7 +9,11 @@
       "**/*"
     ],
     "android": {
-      "package": "com.radiomaranata.app"
+      "package": "com.radiomaranata.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "ios": {
       "bundleIdentifier": "com.radiomaranata.app"
@@ -18,7 +22,17 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-av"
-    ]
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": true
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b72dcd4f-d307-4d98-8dd8-86f0ccf12714"
+      }
+    }
   }
 }

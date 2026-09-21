@@ -1,13 +1,11 @@
 import { useFonts } from 'expo-font';
-import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_700Bold, Inter_800ExtraBold } from '@expo-google-fonts/inter';
 
 export function useAppFonts(): boolean {
   const [fontsLoaded] = useFonts({
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_700Bold,
-    Inter_800ExtraBold,
+    HelveticaNowDisplay_Thin: require('../../assets/HelveticaNowDisplay-Thin.ttf'),
+    HelveticaNowDisplay_Regular: require('../../assets/HelveticaNowDisplay-Regular.ttf'),
+    HelveticaNowDisplay_Medium: require('../../assets/HelveticaNowDisplay-Medium.ttf'),
+    HelveticaNowDisplay_Bold: require('../../assets/HelveticaNowDisplay-Bold.ttf'),
   });
 
   return fontsLoaded;

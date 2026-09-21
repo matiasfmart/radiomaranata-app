@@ -41,7 +41,7 @@ function AppShell() {
       <SafeAreaView style={styles.safeArea}>
         <Animated.View style={[styles.screen, { opacity: screenTransition, transform: [{ translateX: transitionX }] }]}>
           {activeTab === 'listen' && <RadioScreen currentTrack={currentTrack} isLoading={isLoading} isOnline={isOnline} isPlaying={isPlaying} playbackStatus={playbackStatus} playbackError={playbackError} listenerCount={listenerSnapshot.available ? listenerSnapshot.listeners : listenerCount} listenerCountries={listenerSnapshot.available ? listenerSnapshot.countries : 0} streamReady={Boolean(streamUrl)} onToggle={togglePlayback} onRetry={retryPlayback} />}
-          {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} onGoToListen={() => setActiveTab('listen')} />}
+          {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} />}
           {activeTab === 'church' && <ChurchScreen />}
         </Animated.View>
         <View style={styles.themeControl}>

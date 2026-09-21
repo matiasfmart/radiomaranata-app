@@ -8,34 +8,34 @@ import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
-import { LiveIndicator } from '../ui/LiveIndicator';
-import { ListItem, PillButton } from '../ui/ListItem';
+import { ListItem } from '../ui/ListItem';
 import { Screen } from '../ui/Screen';
 import { ScreenHeader } from '../ui/ScreenHeader';
-import { VintageRadioIcon } from '../ui/VintageRadioIcon';
 
 type TracksScreenProps = {
   history: Song[];
   currentTrack: Song;
   isPlaying: boolean;
-  onGoToListen: () => void;
 };
 
-export function TracksScreen({ history, currentTrack, isPlaying, onGoToListen }: TracksScreenProps) {
+export function TracksScreen({ history, currentTrack, isPlaying }: TracksScreenProps) {
   const { colors } = useTheme();
-  const songs = history.length ? history.slice(0, playbackConfig.trackHistoryLimit) : [{ title: copy.tracks.emptyTitle, artist: brand.fallbackArtist, time: playbackConfig.defaultPlayedAtLabel }];
+  const recentSongs = history
+    .filter((song) => song.title !== currentTrack.title || song.artist !== currentTrack.artist)
+    .slice(0, playbackConfig.trackHistoryLimit);
+  const songs = recentSongs.length ? recentSongs : [{ title: copy.tracks.emptyTitle, artist: brand.fallbackArtist, time: playbackConfig.defaultPlayedAtLabel }];
 
   return (
     <Screen scroll>
       <ScreenHeader eyebrow={copy.tracks.eyebrow} title={copy.tracks.title} lead={copy.tracks.lead} />
 
-      <View style={[styles.signalPanel, { backgroundColor: colors.surface }]}>
-        <LiveIndicator active={isPlaying} label={isPlaying ? copy.tracks.currentPlaying : copy.tracks.currentAvailable} />
-        <AppText variant="title" numberOfLines={2} style={styles.signalTitle}>{currentTrack.title}</AppText>
-        <AppText variant="body" tone="muted" numberOfLines={1} style={styles.signalArtist}>{currentTrack.artist}</AppText>
-        <View style={styles.action}>
-          <PillButton label={copy.tracks.openRadio} icon={<VintageRadioIcon size={tokens.icon.sm} color={colors.accentForeground} />} onPress={onGoToListen} />
+      <View style={styles.currentContext}>
+        <View style={styles.currentStatus}>
+          <View style={[styles.statusDot, { backgroundColor: isPlaying ? colors.accent : colors.foregroundSubtle }]} />
+          <AppText variant="caption" tone={isPlaying ? 'accent' : 'subtle'}>{isPlaying ? copy.tracks.currentPlaying : copy.tracks.currentAvailable}</AppText>
         </View>
+        <AppText variant="headline" numberOfLines={2} style={styles.currentTitle}>{currentTrack.title}</AppText>
+        <AppText variant="body" tone="muted" numberOfLines={1} style={styles.currentArtist}>{currentTrack.artist}</AppText>
       </View>
 
       <View style={styles.historyHeader}>
@@ -74,10 +74,11 @@ function StaggeredRow({ index, children }: { index: number; children: React.Reac
 }
 
 const styles = StyleSheet.create({
-  signalPanel: { borderRadius: tokens.radius.md, padding: tokens.space.lg, marginTop: tokens.space.xl, marginBottom: tokens.space.xxl, boxShadow: tokens.shadow.panel },
-  signalTitle: { marginTop: tokens.space.lg },
-  signalArtist: { marginTop: tokens.space.xs },
-  action: { marginTop: tokens.space.lg },
-  historyHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: tokens.space.sm },
+  currentContext: { marginTop: tokens.space.xl, marginBottom: tokens.space.xl },
+  currentStatus: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm },
+  statusDot: { width: 6, height: 6, borderRadius: tokens.radius.pill },
+  currentTitle: { marginTop: tokens.space.md },
+  currentArtist: { marginTop: tokens.space.xs },
+  historyHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: tokens.space.md },
   trackList: { borderRadius: tokens.radius.md, overflow: 'hidden' },
 });

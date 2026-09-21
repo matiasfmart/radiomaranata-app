@@ -34,7 +34,7 @@ type NavItemProps = {
 };
 
 function activeBubbleWidth(label: string) {
-  const contentWidth = tokens.icon.md + tokens.space.sm + label.length * 7.2;
+  const contentWidth = tokens.icon.md + tokens.space.sm + label.length * 8;
   return Math.ceil(contentWidth + tokens.space.lg * 2);
 }
 

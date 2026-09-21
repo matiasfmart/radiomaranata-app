@@ -24,7 +24,7 @@ const modeIcon: Record<ThemeMode, ModeIcon> = {
 const CLOSED_HEIGHT = tokens.height.minTouch;
 const CLOSED_WIDTH = CLOSED_HEIGHT;
 const PANEL_WIDTH = 208;
-const PANEL_HEIGHT = CLOSED_HEIGHT * 2 + 64 + tokens.space.xs * 2;
+const PANEL_HEIGHT = CLOSED_HEIGHT + CLOSED_HEIGHT * 2 + 64 + tokens.space.xs * 2;
 
 // One button, one shape: the panel is anchored on the exact same corner as
 // the trigger and starts scaled down to its footprint, so it reads as the
@@ -60,18 +60,11 @@ export function ThemeToggle() {
   // trigger capsule (same corner, same size), so it looks like one shape.
   const scaleX = progress.interpolate({ inputRange: [0, 1], outputRange: [CLOSED_WIDTH / PANEL_WIDTH, 1] });
   const scaleY = progress.interpolate({ inputRange: [0, 1], outputRange: [CLOSED_HEIGHT / PANEL_HEIGHT, 1] });
-  const triggerOpacity = progress.interpolate({ inputRange: [0, 0.3], outputRange: [1, 0], extrapolate: 'clamp' });
   const panelOpacity = progress.interpolate({ inputRange: [0, 0.2], outputRange: [0, 1], extrapolate: 'clamp' });
   const optionsOpacity = progress.interpolate({ inputRange: [0.55, 1], outputRange: [0, 1], extrapolate: 'clamp' });
 
   return (
     <View style={styles.anchor}>
-      <Animated.View pointerEvents={open ? 'none' : 'auto'} style={[styles.trigger, { backgroundColor: colors.muted, opacity: triggerOpacity }]}>
-        <Pressable accessibilityRole="button" accessibilityLabel={`Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`} onPress={toggle} style={styles.triggerTap}>
-          <AppIcon icon={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
-        </Pressable>
-      </Animated.View>
-
       <View pointerEvents={open ? 'auto' : 'none'} style={styles.panelHit}>
         <Pressable accessibilityLabel="Cerrar selector de tema" onPress={toggle} style={styles.panelTap}>
           <Animated.View
@@ -110,18 +103,24 @@ export function ThemeToggle() {
           </Animated.View>
         </Pressable>
       </View>
+
+      <View style={[styles.trigger, { backgroundColor: colors.muted }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel={`${open ? 'Cerrar selector de tema' : `Tema: ${options.find((option) => option.mode === mode)?.label}. Tocar para elegir.`}`} onPress={toggle} style={styles.triggerTap}>
+          <AppIcon icon={modeIcon[mode]} size={tokens.icon.sm} color={colors.foregroundSubtle} />
+        </Pressable>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   anchor: { width: CLOSED_WIDTH, height: CLOSED_HEIGHT },
-  trigger: { position: 'absolute', top: 0, right: 0, width: CLOSED_WIDTH, height: CLOSED_HEIGHT, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center' },
+  trigger: { position: 'absolute', top: 0, right: 0, width: CLOSED_WIDTH, height: CLOSED_HEIGHT, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', zIndex: 2, elevation: 9 },
   triggerTap: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
-  panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 50, elevation: 8 },
+  panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 1, elevation: 8 },
   panelTap: { width: '100%', height: '100%' },
   panel: { width: '100%', height: '100%', borderRadius: tokens.radius.md, borderWidth: 1, boxShadow: tokens.shadow.panel },
-  options: { paddingVertical: tokens.space.xs },
+  options: { paddingTop: CLOSED_HEIGHT + tokens.space.xs, paddingBottom: tokens.space.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
   rowWithCaption: { minHeight: 64 },
   rowCopy: { flex: 1 },

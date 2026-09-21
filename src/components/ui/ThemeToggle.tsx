@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   triggerTap: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
   panelHit: { position: 'absolute', top: 0, right: 0, width: PANEL_WIDTH, height: PANEL_HEIGHT, zIndex: 1, elevation: 8 },
   panelTap: { width: '100%', height: '100%' },
-  panel: { width: '100%', height: '100%', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.panel },
+  panel: { width: '100%', height: '100%', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.floating },
   options: { paddingTop: PANEL_HEADER_HEIGHT, paddingBottom: tokens.space.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm, minHeight: tokens.height.minTouch, paddingHorizontal: tokens.space.base },
   rowWithCaption: { minHeight: 64 },

@@ -98,8 +98,8 @@ export const tokens = {
   // Single lateral margin token used by every screen.
   screenMargin: 24,
   shadow: {
-    floating: '0px 2px 6px rgba(49,42,36,0.035)',
-    panel: '0px 1px 4px rgba(49,42,36,0.025)',
+    floating: '0px 8px 18px rgba(49,42,36,0.07)',
+    panel: '0px 3px 10px rgba(49,42,36,0.045)',
   },
   motion: {
     duration: {

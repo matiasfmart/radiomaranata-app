@@ -143,7 +143,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
       >
         <View style={styles.navIconWrap}>
           {tab.icon === 'radio'
-            ? <BrandMark size={tokens.icon.md} color={iconColor} />
+            ? <BrandMark size={tokens.icon.lg} color={iconColor} />
             : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
           {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
         </View>

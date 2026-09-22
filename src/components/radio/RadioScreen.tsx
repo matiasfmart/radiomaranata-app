@@ -6,6 +6,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { tokens } from '../../theme/tokens';
 import { PlaybackStatus, Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
+import { BrandMark } from '../ui/BrandMark';
 import { Chip } from '../ui/Chip';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { Screen } from '../ui/Screen';
@@ -41,7 +42,10 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
     <Screen bottomInset={tokens.height.navigationDock + tokens.space.md}>
       <View style={styles.header}>
         <View style={styles.brandLockup}>
-          <AppText variant="headline">{brand.wordmark}</AppText>
+          <View style={styles.brandRow}>
+            <BrandMark size={tokens.icon.lg} color={colors.foreground} />
+            <AppText variant="headline">{brand.wordmark}</AppText>
+          </View>
           <View style={styles.brandMeta}>
             <AppText variant="caption" tone="subtle">{brand.frequency}</AppText>
             <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
@@ -86,6 +90,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 },
   brandLockup: { flex: 1 },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm },
   brandMeta: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.md, marginTop: tokens.space.xs },
   listeningModule: { flex: 1, justifyContent: 'center', paddingBottom: tokens.space.xxl },
   track: { marginTop: tokens.space.md },

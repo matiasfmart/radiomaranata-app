@@ -30,5 +30,5 @@ export function Screen({ children, scroll = false, bottomInset = 0 }: ScreenProp
 
 const styles = StyleSheet.create({
   staticScreen: { flex: 1, paddingHorizontal: tokens.screenMargin, paddingTop: tokens.space.xl },
-  scrollContent: { paddingHorizontal: tokens.screenMargin, paddingTop: tokens.space.xxl, minHeight: '100%' },
+  scrollContent: { paddingHorizontal: tokens.screenMargin, paddingTop: tokens.space.xxl + tokens.space.md, minHeight: '100%' },
 });

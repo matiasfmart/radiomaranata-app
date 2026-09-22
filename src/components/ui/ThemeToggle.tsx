@@ -72,7 +72,7 @@ export function ThemeToggle() {
             style={[
               styles.panel,
               {
-                backgroundColor: colors.muted,
+                backgroundColor: colors.surface,
                 opacity: panelOpacity,
                 transform: [{ scaleX }, { scaleY }],
                 transformOrigin: 'top right',

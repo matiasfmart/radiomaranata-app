@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { ActivityIndicator, Animated, StyleSheet, View } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChurchScreen } from './src/components/church/ChurchScreen';
 import { BottomNavigation } from './src/components/navigation/BottomNavigation';
 import { RadioScreen } from './src/components/radio/RadioScreen';
@@ -14,6 +14,7 @@ import { useNowPlaying } from './src/hooks/useNowPlaying';
 import { useRadioPlayer } from './src/hooks/useRadioPlayer';
 import { useScreenTransition } from './src/hooks/useScreenTransition';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
+import { tokens } from './src/theme/tokens';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
 
 function AppShell() {
   const { colors, scheme } = useTheme();
+  const insets = useSafeAreaInsets();
   const fontsLoaded = useAppFonts();
   const [activeTab, setActiveTab] = useState<AppTab>('listen');
   const { currentTrack, history, isOnline, listenerCount, streamUrl } = useNowPlaying();
@@ -47,7 +49,7 @@ function AppShell() {
           {activeTab === 'schedule' && <TracksScreen history={history} currentTrack={currentTrack} isPlaying={isPlaying} />}
           {activeTab === 'church' && <ChurchScreen listenerSnapshot={listenerSnapshot} />}
         </Animated.View>
-        <View style={styles.themeControl}>
+        <View style={[styles.themeControl, { top: insets.top + tokens.space.md }]}>
           <ThemeToggle />
         </View>
         <BottomNavigation activeTab={activeTab} isPlaying={isPlaying} onTabChange={setActiveTab} />
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   safeArea: { flex: 1 },
   screen: { flex: 1 },
-  themeControl: { position: 'absolute', top: 24, right: 24, zIndex: 20 },
+  themeControl: { position: 'absolute', right: tokens.screenMargin, zIndex: 20 },
   loadingScreen: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 });
 

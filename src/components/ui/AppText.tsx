@@ -34,7 +34,6 @@ export function AppText({ variant, tone = 'foreground', align, style, ...rest }:
           fontFamily: roleStyle.fontFamily,
           fontSize: roleStyle.fontSize,
           lineHeight: roleStyle.lineHeight,
-          fontWeight: roleStyle.fontWeight,
           letterSpacing: roleStyle.letterSpacing,
           color: toneColor(colors, tone),
           textAlign: align,

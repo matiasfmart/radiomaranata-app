@@ -28,9 +28,8 @@ export const tokens = {
       8: '#1F1F1F',
       9: '#0A0A0A',
     },
-    // FM Vermilion: warm mineral surfaces with one solid frequency signal.
-    // The accent stays opaque so playback, pulses, and moving bubbles retain
-    // the same identity in both themes.
+    // Broadcast blue: the app keeps its existing warm surfaces while the
+    // signal color follows the supplied Radio Maranata logo.
     light: {
       background: '#E7E5E1',
       foreground: '#151513',
@@ -41,9 +40,9 @@ export const tokens = {
       foregroundSubtle: '#89847C',
       invertedBackground: '#151513',
       invertedForeground: '#FFFFFF',
-      accent: '#C94038',
+      accent: '#2451A6',
       accentForeground: '#FFFFFF',
-      accentMuted: '#EFC0BB',
+      accentMuted: '#D7E2F7',
       transparent: 'transparent',
     } satisfies ThemeColors,
     dark: {
@@ -56,9 +55,9 @@ export const tokens = {
       foregroundSubtle: '#948F87',
       invertedBackground: '#F4F2ED',
       invertedForeground: '#1A0D0B',
-      accent: '#D45148',
+      accent: '#4E7FE0',
       accentForeground: '#FFFFFF',
-      accentMuted: '#42201D',
+      accentMuted: '#1C376D',
       transparent: 'transparent',
     } satisfies ThemeColors,
   },

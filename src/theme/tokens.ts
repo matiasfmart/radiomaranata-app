@@ -28,17 +28,18 @@ export const tokens = {
       8: '#1F1F1F',
       9: '#0A0A0A',
     },
-    // Broadcast blue: the app keeps its existing warm surfaces while the
-    // signal color follows the supplied Radio Maranata logo.
+    // Broadcast blue on an Instagram-like white surface system.
+    // The light theme stays neutral and cool so the logo color carries the
+    // identity without competing against beige backgrounds.
     light: {
-      background: '#E7E5E1',
-      foreground: '#151513',
-      muted: '#DDDAD4',
-      mutedForeground: '#6B6862',
-      surface: '#F8F7F4',
-      surfacePressed: '#E8E4DE',
-      foregroundSubtle: '#89847C',
-      invertedBackground: '#151513',
+      background: '#FAFAFA',
+      foreground: '#111111',
+      muted: '#F5F5F5',
+      mutedForeground: '#737373',
+      surface: '#FFFFFF',
+      surfacePressed: '#EFEFEF',
+      foregroundSubtle: '#8E8E8E',
+      invertedBackground: '#111111',
       invertedForeground: '#FFFFFF',
       accent: '#2451A6',
       accentForeground: '#FFFFFF',

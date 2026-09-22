@@ -43,7 +43,7 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
       <View style={styles.header}>
         <View style={styles.brandLockup}>
           <View style={styles.brandRow}>
-            <BrandMark size={tokens.icon.lg + tokens.space.md} color={colors.foreground} />
+            <BrandMark size={tokens.height.minTouch} color={colors.foreground} />
             <AppText variant="headline">{brand.wordmark}</AppText>
           </View>
           <View style={styles.brandMeta}>

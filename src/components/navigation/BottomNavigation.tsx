@@ -98,14 +98,15 @@ export function BottomNavigation({ activeTab, isPlaying, onTabChange }: BottomNa
   }, [bubblePulse, bubbleWidth, bubbleX, dockPulse, dockWidth, labelOpacity, reducedMotion, showActiveLabel, targetBubbleWidth, targetBubbleX, targetDockWidth]);
 
   return (
-    <Animated.View style={[styles.navDock, { width: dockWidth, backgroundColor: colors.surface, transform: [{ scale: dockPulse }] }]}>
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.activeBubble, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE, backgroundColor: colors.invertedBackground, transform: [{ scale: bubblePulse }] }]}
-      />
-      <View style={styles.navItems}>
-        {bottomNavigationItems.map((tab, index) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemX={tabFrames[index].x} itemWidth={tabFrames[index].width} showActiveLabel={showActiveLabel} labelOpacity={labelOpacity} reducedMotion={reducedMotion} onPress={() => onTabChange(tab.id)} />)}
-      </View>
+    <Animated.View style={[styles.navDock, { width: dockWidth }]}>
+      <Animated.View style={[styles.navSurface, { backgroundColor: colors.surface, transform: [{ scale: dockPulse }] }]}>
+        <Animated.View pointerEvents="none" style={[styles.activeBubbleLayout, { left: bubbleX, width: bubbleWidth, height: ACTIVE_BUBBLE_SIZE }]}>
+          <Animated.View style={[styles.activeBubble, { backgroundColor: colors.invertedBackground, transform: [{ scale: bubblePulse }] }]} />
+        </Animated.View>
+        <View style={styles.navItems}>
+          {bottomNavigationItems.map((tab, index) => <NavItem key={tab.id} tab={tab} active={activeTab === tab.id} isPlaying={isPlaying && tab.id === 'listen'} itemX={tabFrames[index].x} itemWidth={tabFrames[index].width} showActiveLabel={showActiveLabel} labelOpacity={labelOpacity} reducedMotion={reducedMotion} onPress={() => onTabChange(tab.id)} />)}
+        </View>
+      </Animated.View>
     </Animated.View>
   );
 }
@@ -129,32 +130,37 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
   }, [itemWidth, itemX, position, reducedMotion, width]);
 
   return (
-    <BubblePressable
-      accessibilityLabel={tab.label}
-      accessibilityRole="tab"
-      accessibilityState={{ selected: active }}
-      aria-selected={active}
-      bubbleColor={active ? colors.invertedBackground : colors.foregroundSubtle}
-      containerStyle={[styles.navItem, { left: position, width }]}
-      onPress={onPress}
-      style={[styles.navTap, active && showActiveLabel && styles.navTapActive]}
-    >
-      <View style={styles.navIconWrap}>
-        {tab.icon === 'radio'
-          ? <VintageRadioIcon size={tokens.icon.md} color={iconColor} />
-          : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
-        {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
-      </View>
-      {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" style={{ color: colors.invertedForeground }}>{tab.label}</AppText></Animated.View>}
-    </BubblePressable>
+    <Animated.View style={[styles.navItem, { left: position, width }]}>
+      <BubblePressable
+        accessibilityLabel={tab.label}
+        accessibilityRole="tab"
+        accessibilityState={{ selected: active }}
+        aria-selected={active}
+        bubbleColor={active ? colors.invertedBackground : colors.foregroundSubtle}
+        containerStyle={styles.navItemInner}
+        onPress={onPress}
+        style={[styles.navTap, active && showActiveLabel && styles.navTapActive]}
+      >
+        <View style={styles.navIconWrap}>
+          {tab.icon === 'radio'
+            ? <VintageRadioIcon size={tokens.icon.md} color={iconColor} />
+            : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
+          {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
+        </View>
+        {active && showActiveLabel && <Animated.View style={{ opacity: labelOpacity }}><AppText variant="label" style={{ color: colors.invertedForeground }}>{tab.label}</AppText></Animated.View>}
+      </BubblePressable>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.navigation, overflow: 'hidden' },
+  navDock: { position: 'absolute', alignSelf: 'center', bottom: tokens.space.md, height: tokens.height.navigationDock, alignItems: 'center', justifyContent: 'center' },
+  navSurface: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md, boxShadow: tokens.shadow.navigation, overflow: 'hidden' },
   navItems: { width: '100%', height: ACTIVE_BUBBLE_SIZE, zIndex: 1 },
-  activeBubble: { position: 'absolute', top: NAV_DOCK_PADDING, borderRadius: tokens.radius.md },
+  activeBubbleLayout: { position: 'absolute', top: NAV_DOCK_PADDING, zIndex: 0 },
+  activeBubble: { width: '100%', height: '100%', borderRadius: tokens.radius.md },
   navItem: { position: 'absolute', top: 0, zIndex: 1 },
+  navItemInner: { width: '100%', height: '100%' },
   navTap: { height: ACTIVE_BUBBLE_SIZE, alignItems: 'center', justifyContent: 'center', borderRadius: tokens.radius.md },
   navTapActive: { flexDirection: 'row', gap: tokens.space.sm },
   navIconWrap: { width: tokens.icon.lg, height: tokens.icon.lg, alignItems: 'center', justifyContent: 'center' },

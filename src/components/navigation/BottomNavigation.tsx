@@ -9,6 +9,7 @@ import { AppIcon } from '../ui/AppIcon';
 import { AppText } from '../ui/AppText';
 import { BrandMark } from '../ui/BrandMark';
 import { BubblePressable } from '../ui/BubblePressable';
+import { VintageRadioIcon } from '../ui/VintageRadioIcon';
 
 const ACTIVE_BUBBLE_SIZE = 56;
 const NAV_ITEM_GAP = tokens.space.sm;
@@ -143,7 +144,7 @@ function NavItem({ tab, active, isPlaying, itemX, itemWidth, showActiveLabel, la
       >
         <View style={styles.navIconWrap}>
           {tab.icon === 'radio'
-            ? <BrandMark size={tokens.icon.lg} color={iconColor} />
+            ? <VintageRadioIcon size={tokens.icon.md} color={iconColor} />
             : <AppIcon icon={navIcons[tab.icon]} size={tokens.icon.md} color={iconColor} />}
           {isPlaying && <View style={[styles.navPlayingDot, { backgroundColor: colors.accent }]} />}
         </View>

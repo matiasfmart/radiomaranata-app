@@ -8,6 +8,7 @@ import { PlaybackStatus, Song } from '../../types/radio';
 import { AppText } from '../ui/AppText';
 import { BrandMark } from '../ui/BrandMark';
 import { Chip } from '../ui/Chip';
+import { GradientText } from '../ui/GradientText';
 import { LiveIndicator } from '../ui/LiveIndicator';
 import { Screen } from '../ui/Screen';
 import { SignalVisualizer } from '../ui/SignalVisualizer';
@@ -44,10 +45,10 @@ export function RadioScreen({ currentTrack, isLoading, isOnline, isPlaying, play
         <View style={styles.brandLockup}>
           <View style={styles.brandRow}>
             <BrandMark size={tokens.height.minTouch} color={colors.foreground} />
-            <AppText variant="headline">{brand.wordmark}</AppText>
+            <AppText variant="headline">{brand.frequencyShort}</AppText>
+            <GradientText variant="headline">{brand.wordmark}</GradientText>
           </View>
           <View style={styles.brandMeta}>
-            <AppText variant="caption" tone="subtle">{brand.frequency}</AppText>
             <LiveIndicator active={isOnline} label={isOnline ? 'En vivo' : 'Fuera de línea'} colorize={false} />
           </View>
         </View>
